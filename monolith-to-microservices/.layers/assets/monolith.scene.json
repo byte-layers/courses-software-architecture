@@ -1,0 +1,1422 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "monolith-to-microservices",
+ "title": "Monolithe et micro-services",
+ "lang": "fr",
+ "kit": "plan",
+ "legend": [
+  {
+   "tone": "g",
+   "label": "unité de déploiement"
+  },
+  {
+   "tone": "v",
+   "label": "module de code"
+  },
+  {
+   "tone": "b",
+   "label": "données"
+  },
+  {
+   "tone": "n",
+   "label": "machine"
+  }
+ ],
+ "entities": [
+  {
+   "id": "d-src",
+   "kind": "node",
+   "at": [
+    -13,
+    0
+   ],
+   "tone": "y",
+   "size": [
+    7,
+    2.6,
+    1
+   ],
+   "title": "code source",
+   "sub": "des centaines de fichiers",
+   "detail": "Le **code source** de la boutique : ce que les développeurs écrivent et modifient."
+  },
+  {
+   "id": "d-build",
+   "kind": "node",
+   "at": [
+    -4.3,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    7,
+    2.6,
+    1
+   ],
+   "title": "construction",
+   "sub": "compiler, empaqueter, tester",
+   "detail": "La **construction** (*build*) transforme le code en quelque chose qu'on peut lancer, et passe les tests."
+  },
+  {
+   "id": "d-art",
+   "kind": "node",
+   "at": [
+    4.3,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    7,
+    2.6,
+    1
+   ],
+   "title": "artefact",
+   "sub": "une archive, une image",
+   "detail": "L'**artefact** : le paquet prêt à lancer (une archive `.jar`, une image de conteneur…). C'est lui qu'on livre."
+  },
+  {
+   "id": "d-srv",
+   "kind": "layer",
+   "at": [
+    13,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    7.4,
+    5.0,
+    1
+   ],
+   "title": "serveur",
+   "detail": "La machine où tourne la version en service."
+  },
+  {
+   "id": "d-run",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "g",
+   "size": [
+    6,
+    1.9,
+    1
+   ],
+   "in": "d-srv",
+   "title": "v1 en service"
+  },
+  {
+   "id": "m-app",
+   "kind": "layer",
+   "at": [
+    -8.5,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    14.0,
+    10.0,
+    1
+   ],
+   "title": "boutique",
+   "sub": "une seule unité de déploiement",
+   "detail": "Tout le code de la boutique est construit et livré **d'un bloc** : un seul artefact."
+  },
+  {
+   "id": "m-cat",
+   "kind": "node",
+   "at": [
+    -3.4,
+    -1.4
+   ],
+   "tone": "v",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "m-app",
+   "title": "catalogue"
+  },
+  {
+   "id": "m-pan",
+   "kind": "node",
+   "at": [
+    3.4,
+    -1.4
+   ],
+   "tone": "v",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "m-app",
+   "title": "panier"
+  },
+  {
+   "id": "m-pay",
+   "kind": "node",
+   "at": [
+    -3.4,
+    2.6
+   ],
+   "tone": "v",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "m-app",
+   "title": "paiement"
+  },
+  {
+   "id": "m-liv",
+   "kind": "node",
+   "at": [
+    3.4,
+    2.6
+   ],
+   "tone": "v",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "m-app",
+   "title": "livraison"
+  },
+  {
+   "id": "m-s0",
+   "kind": "layer",
+   "at": [
+    9.5,
+    -6.0
+   ],
+   "tone": "n",
+   "size": [
+    8.0,
+    4.2,
+    1
+   ],
+   "title": "serveur",
+   "detail": "Sur le schéma, trois serveurs : trois **copies** du même artefact, derrière un répartiteur."
+  },
+  {
+   "id": "m-c0",
+   "kind": "node",
+   "at": [
+    0,
+    0.6
+   ],
+   "tone": "g",
+   "size": [
+    6.4,
+    1.9,
+    1
+   ],
+   "in": "m-s0",
+   "title": "boutique v1"
+  },
+  {
+   "id": "m-s1",
+   "kind": "layer",
+   "at": [
+    9.5,
+    0.0
+   ],
+   "tone": "n",
+   "size": [
+    8.0,
+    4.2,
+    1
+   ]
+  },
+  {
+   "id": "m-c1",
+   "kind": "node",
+   "at": [
+    0,
+    0.6
+   ],
+   "tone": "g",
+   "size": [
+    6.4,
+    1.9,
+    1
+   ],
+   "in": "m-s1",
+   "title": "boutique v1"
+  },
+  {
+   "id": "m-s2",
+   "kind": "layer",
+   "at": [
+    9.5,
+    6.0
+   ],
+   "tone": "n",
+   "size": [
+    8.0,
+    4.2,
+    1
+   ]
+  },
+  {
+   "id": "m-c2",
+   "kind": "node",
+   "at": [
+    0,
+    0.6
+   ],
+   "tone": "g",
+   "size": [
+    6.4,
+    1.9,
+    1
+   ],
+   "in": "m-s2",
+   "title": "boutique v1"
+  },
+  {
+   "id": "f-who",
+   "kind": "node",
+   "at": [
+    -10.5,
+    -3.5
+   ],
+   "tone": "n",
+   "size": [
+    10,
+    2.6,
+    1
+   ],
+   "title": "« fullstack »",
+   "sub": "un profil de développeur",
+   "detail": "Un développeur **fullstack** sait travailler sur l'interface et sur le serveur. C'est un **profil**, pas une architecture."
+  },
+  {
+   "id": "f-fw",
+   "kind": "node",
+   "at": [
+    -10.5,
+    1.5
+   ],
+   "tone": "n",
+   "size": [
+    10,
+    2.6,
+    1
+   ],
+   "title": "framework fullstack",
+   "sub": "un projet, souvent un seul artefact",
+   "detail": "Un **framework fullstack** (Next.js, Laravel, Rails, Symfony…) couvre les pages et le serveur dans un même projet. Livré d'un bloc, c'est un monolithe."
+  },
+  {
+   "id": "f-front",
+   "kind": "layer",
+   "at": [
+    8.5,
+    -5.4
+   ],
+   "tone": "g",
+   "size": [
+    13,
+    5.4,
+    1
+   ],
+   "title": "front",
+   "sub": "l'appli du navigateur",
+   "detail": "Le **front** : l'application qui tourne dans le navigateur, livrée à part (souvent de simples fichiers)."
+  },
+  {
+   "id": "f-fspa",
+   "kind": "node",
+   "at": [
+    0,
+    1.3
+   ],
+   "tone": "v",
+   "size": [
+    11,
+    1.9,
+    1
+   ],
+   "in": "f-front",
+   "title": "écrans de la boutique"
+  },
+  {
+   "id": "f-back",
+   "kind": "layer",
+   "at": [
+    8.5,
+    3.6
+   ],
+   "tone": "g",
+   "size": [
+    13,
+    9.0,
+    1
+   ],
+   "title": "back",
+   "sub": "l'API",
+   "detail": "Le **back** : le serveur qui expose l'API. À lui seul, avec ses quatre modules, il reste **un monolithe**."
+  },
+  {
+   "id": "f-cat",
+   "kind": "node",
+   "at": [
+    -3.1,
+    -1.2
+   ],
+   "tone": "v",
+   "size": [
+    5.6,
+    1.9,
+    1
+   ],
+   "in": "f-back",
+   "title": "catalogue"
+  },
+  {
+   "id": "f-pan",
+   "kind": "node",
+   "at": [
+    3.1,
+    -1.2
+   ],
+   "tone": "v",
+   "size": [
+    5.6,
+    1.9,
+    1
+   ],
+   "in": "f-back",
+   "title": "panier"
+  },
+  {
+   "id": "f-pay",
+   "kind": "node",
+   "at": [
+    -3.1,
+    2.4
+   ],
+   "tone": "v",
+   "size": [
+    5.6,
+    1.9,
+    1
+   ],
+   "in": "f-back",
+   "title": "paiement"
+  },
+  {
+   "id": "f-liv",
+   "kind": "node",
+   "at": [
+    3.1,
+    2.4
+   ],
+   "tone": "v",
+   "size": [
+    5.6,
+    1.9,
+    1
+   ],
+   "in": "f-back",
+   "title": "livraison"
+  },
+  {
+   "id": "q-app",
+   "kind": "layer",
+   "at": [
+    0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    21,
+    14,
+    1
+   ],
+   "title": "boutique",
+   "sub": "une seule unité de déploiement",
+   "detail": "Toujours **un seul artefact**, mais le code est découpé en modules aux frontières nettes."
+  },
+  {
+   "id": "q-cat",
+   "kind": "layer",
+   "at": [
+    -4.8,
+    -2.4
+   ],
+   "tone": "v",
+   "size": [
+    8.6,
+    5.2,
+    1
+   ],
+   "in": "q-app",
+   "title": "catalogue",
+   "detail": "Chaque **module** n'expose qu'une petite **interface publique** ; le reste est privé."
+  },
+  {
+   "id": "q-cat-i",
+   "kind": "node",
+   "at": [
+    0,
+    -0.6
+   ],
+   "tone": "v",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-cat",
+   "title": "interface"
+  },
+  {
+   "id": "q-cat-t",
+   "kind": "node",
+   "at": [
+    0,
+    1.4
+   ],
+   "tone": "b",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-cat",
+   "title": "ses tables",
+   "detail": "Chaque module a **ses tables** ; les autres n'y touchent pas."
+  },
+  {
+   "id": "q-pan",
+   "kind": "layer",
+   "at": [
+    4.8,
+    -2.4
+   ],
+   "tone": "v",
+   "size": [
+    8.6,
+    5.2,
+    1
+   ],
+   "in": "q-app",
+   "title": "panier"
+  },
+  {
+   "id": "q-pan-i",
+   "kind": "node",
+   "at": [
+    0,
+    -0.6
+   ],
+   "tone": "v",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-pan"
+  },
+  {
+   "id": "q-pan-t",
+   "kind": "node",
+   "at": [
+    0,
+    1.4
+   ],
+   "tone": "b",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-pan"
+  },
+  {
+   "id": "q-pay",
+   "kind": "layer",
+   "at": [
+    -4.8,
+    3.6
+   ],
+   "tone": "v",
+   "size": [
+    8.6,
+    5.2,
+    1
+   ],
+   "in": "q-app",
+   "title": "paiement"
+  },
+  {
+   "id": "q-pay-i",
+   "kind": "node",
+   "at": [
+    0,
+    -0.6
+   ],
+   "tone": "v",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-pay"
+  },
+  {
+   "id": "q-pay-t",
+   "kind": "node",
+   "at": [
+    0,
+    1.4
+   ],
+   "tone": "b",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-pay"
+  },
+  {
+   "id": "q-liv",
+   "kind": "layer",
+   "at": [
+    4.8,
+    3.6
+   ],
+   "tone": "v",
+   "size": [
+    8.6,
+    5.2,
+    1
+   ],
+   "in": "q-app",
+   "title": "livraison"
+  },
+  {
+   "id": "q-liv-i",
+   "kind": "node",
+   "at": [
+    0,
+    -0.6
+   ],
+   "tone": "v",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-liv"
+  },
+  {
+   "id": "q-liv-t",
+   "kind": "node",
+   "at": [
+    0,
+    1.4
+   ],
+   "tone": "b",
+   "size": [
+    7.199999999999999,
+    1.5,
+    1
+   ],
+   "in": "q-liv"
+  },
+  {
+   "id": "s-cat",
+   "kind": "layer",
+   "at": [
+    -6.5,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    10.0,
+    5.6,
+    1
+   ],
+   "title": "catalogue",
+   "sub": "service",
+   "detail": "Un **micro-service** : construit, testé et **déployé seul**, avec sa propre base."
+  },
+  {
+   "id": "s-cat-c",
+   "kind": "node",
+   "at": [
+    0,
+    -0.5
+   ],
+   "tone": "v",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-cat",
+   "title": "code",
+   "label": "v1"
+  },
+  {
+   "id": "s-cat-d",
+   "kind": "node",
+   "at": [
+    0,
+    1.5
+   ],
+   "tone": "b",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-cat",
+   "title": "sa base"
+  },
+  {
+   "id": "s-pan",
+   "kind": "layer",
+   "at": [
+    6.5,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    10.0,
+    5.6,
+    1
+   ],
+   "title": "panier",
+   "sub": "service"
+  },
+  {
+   "id": "s-pan-c",
+   "kind": "node",
+   "at": [
+    0,
+    -0.5
+   ],
+   "tone": "v",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-pan",
+   "label": "v1"
+  },
+  {
+   "id": "s-pan-d",
+   "kind": "node",
+   "at": [
+    0,
+    1.5
+   ],
+   "tone": "b",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-pan"
+  },
+  {
+   "id": "s-pay",
+   "kind": "layer",
+   "at": [
+    -6.5,
+    4.0
+   ],
+   "tone": "g",
+   "size": [
+    10.0,
+    5.6,
+    1
+   ],
+   "title": "paiement",
+   "sub": "service"
+  },
+  {
+   "id": "s-pay-c",
+   "kind": "node",
+   "at": [
+    0,
+    -0.5
+   ],
+   "tone": "v",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-pay",
+   "label": "v1"
+  },
+  {
+   "id": "s-pay-d",
+   "kind": "node",
+   "at": [
+    0,
+    1.5
+   ],
+   "tone": "b",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-pay"
+  },
+  {
+   "id": "s-liv",
+   "kind": "layer",
+   "at": [
+    6.5,
+    4.0
+   ],
+   "tone": "g",
+   "size": [
+    10.0,
+    5.6,
+    1
+   ],
+   "title": "livraison",
+   "sub": "service"
+  },
+  {
+   "id": "s-liv-c",
+   "kind": "node",
+   "at": [
+    0,
+    -0.5
+   ],
+   "tone": "v",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-liv",
+   "label": "v1"
+  },
+  {
+   "id": "s-liv-d",
+   "kind": "node",
+   "at": [
+    0,
+    1.5
+   ],
+   "tone": "b",
+   "size": [
+    8.4,
+    1.5,
+    1
+   ],
+   "in": "s-liv"
+  }
+ ],
+ "steps": [
+  {
+   "id": "deployer",
+   "label": "Déployer",
+   "title": "Déployer : mettre une nouvelle version en service",
+   "body": [
+    "Une ligne de code corrigée n'aide personne tant qu'elle n'est pas en service."
+   ],
+   "show": [
+    "d-src",
+    "d-srv",
+    "d-run"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "en service",
+     "value": "v1"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-src",
+       "label": "frais de port corrigés"
+      }
+     ],
+     "say": "Un développeur corrige le calcul des frais de port dans le **code source**."
+    },
+    {
+     "do": "wait",
+     "ms": 700
+    },
+    {
+     "do": "scene",
+     "show": [
+      "d-build"
+     ],
+     "link": [
+      {
+       "from": "d-src",
+       "to": "d-build"
+      }
+     ],
+     "say": "La **construction** compile, empaquette et passe les tests."
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-src",
+      "d-build"
+     ],
+     "label": "v2"
+    },
+    {
+     "do": "scene",
+     "show": [
+      "d-art"
+     ],
+     "link": [
+      {
+       "from": "d-build",
+       "to": "d-art"
+      }
+     ],
+     "say": "Elle produit un **artefact** : le paquet prêt à lancer."
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-build",
+      "d-art"
+     ],
+     "label": "v2"
+    },
+    {
+     "do": "scene",
+     "link": [
+      {
+       "from": "d-art",
+       "to": "d-run"
+      }
+     ],
+     "say": "**Déployer**, c'est installer cet artefact et le mettre en service à la place de l'ancien."
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-art",
+      "d-run"
+     ],
+     "label": "v2"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-run",
+       "title": "v2 en service",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "v2"
+      }
+     ],
+     "say": "Ce qu'on livre d'un bloc s'appelle une **unité de déploiement**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "monolithe",
+   "label": "Monolithe",
+   "title": "Le monolithe : tout se déploie ensemble",
+   "body": [
+    "Une boutique, quatre modules, un seul artefact."
+   ],
+   "show": [
+    "m-app",
+    "m-cat",
+    "m-pan",
+    "m-pay",
+    "m-liv"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "à déployer",
+     "value": 1
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "m-app",
+       "tone": "y"
+      }
+     ],
+     "say": "Quatre modules dans le code, mais **un seul artefact** : c'est un **monolithe**."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "m-s0",
+      "m-s1",
+      "m-s2",
+      "m-c0",
+      "m-c1",
+      "m-c2"
+     ],
+     "link": [
+      {
+       "from": "m-app",
+       "to": "m-s0",
+       "dashed": true
+      },
+      {
+       "from": "m-app",
+       "to": "m-s1",
+       "dashed": true
+      },
+      {
+       "from": "m-app",
+       "to": "m-s2",
+       "dashed": true
+      }
+     ],
+     "set": [
+      {
+       "id": "m-app",
+       "tone": "g"
+      }
+     ],
+     "say": "On le fait tourner sur **trois serveurs** pour tenir la charge."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "à déployer",
+       "value": "1, en 3 copies"
+      }
+     ],
+     "say": "Trois machines, trois copies : c'est **toujours un monolithe**."
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "m-pay",
+       "tone": "y",
+       "label": "1 ligne changée"
+      }
+     ],
+     "say": "Une ligne change dans le paiement…"
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "m-c0",
+       "title": "boutique v2",
+       "tone": "y"
+      },
+      {
+       "id": "m-c1",
+       "title": "boutique v2",
+       "tone": "y"
+      },
+      {
+       "id": "m-c2",
+       "title": "boutique v2",
+       "tone": "y"
+      }
+     ],
+     "say": "…et c'est **toute la boutique** qu'on reconstruit et qu'on redéploie."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "front-back",
+   "label": "Front et back",
+   "title": "Fullstack, front, back : ce ne sont pas des architectures",
+   "body": [
+    "Trois mots qu'on prend souvent pour des architectures."
+   ],
+   "show": [
+    "f-who",
+    "f-fw"
+   ],
+   "links": [],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "f-who",
+       "tone": "y"
+      }
+     ],
+     "say": "« **Fullstack** » décrit une personne, ou un framework qui couvre pages et serveur : pas une architecture."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "show": [
+      "f-front",
+      "f-fspa",
+      "f-back",
+      "f-cat",
+      "f-pan",
+      "f-pay",
+      "f-liv"
+     ],
+     "link": [
+      {
+       "from": "f-fspa",
+       "to": "f-back"
+      }
+     ],
+     "set": [
+      {
+       "id": "f-who",
+       "tone": "n"
+      }
+     ],
+     "say": "À droite, on sépare le **front** (l'appli du navigateur) et le **back** (l'API)."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "f-front",
+       "label": "unité 1"
+      },
+      {
+       "id": "f-back",
+       "label": "unité 2"
+      }
+     ],
+     "say": "Cela fait **deux unités de déploiement**…"
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "f-back",
+       "tone": "y"
+      }
+     ],
+     "say": "…mais le back, avec ses quatre modules livrés ensemble, **reste un monolithe**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "modulaire",
+   "label": "Modulaire",
+   "title": "Le monolithe modulaire : des frontières dans le code",
+   "body": [
+    "Toujours un seul artefact, mais des frontières tenues à l'intérieur."
+   ],
+   "show": [
+    "q-app",
+    "q-cat",
+    "q-cat-i",
+    "q-cat-t",
+    "q-pan",
+    "q-pan-i",
+    "q-pan-t",
+    "q-pay",
+    "q-pay-i",
+    "q-pay-t",
+    "q-liv",
+    "q-liv-i",
+    "q-liv-t"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "à déployer",
+     "value": 1
+    },
+    {
+     "label": "modules",
+     "value": 4
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "q-cat",
+       "tone": "y"
+      }
+     ],
+     "say": "Chaque module a ses **tables** et une petite **interface** : le reste ne regarde que lui."
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "link": [
+      {
+       "from": "q-pan-i",
+       "to": "q-cat-i"
+      }
+     ],
+     "set": [
+      {
+       "id": "q-cat",
+       "tone": "v"
+      }
+     ],
+     "say": "Le panier a besoin d'un prix : il passe par l'interface du catalogue."
+    },
+    {
+     "do": "send",
+     "path": [
+      "q-pan-i",
+      "q-cat-i"
+     ],
+     "label": "prix ?",
+     "reply": "1 290 €"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "q-cat-t",
+       "tone": "y",
+       "label": "à lui seul"
+      }
+     ],
+     "say": "Il ne va **jamais** lire directement les tables du catalogue."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "q-app",
+       "tone": "y"
+      },
+      {
+       "id": "q-cat-t",
+       "tone": "b",
+       "label": null
+      }
+     ],
+     "say": "Un seul déploiement, mais des modules **séparables** le jour où il le faudra."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "micro-services",
+   "label": "Micro-services",
+   "title": "Micro-services : chacun se déploie seul",
+   "body": [
+    "Les modules deviennent des programmes à part."
+   ],
+   "show": [
+    "s-cat",
+    "s-cat-c",
+    "s-cat-d",
+    "s-pan",
+    "s-pan-c",
+    "s-pan-d",
+    "s-pay",
+    "s-pay-c",
+    "s-pay-d",
+    "s-liv",
+    "s-liv-c",
+    "s-liv-d"
+   ],
+   "links": [
+    {
+     "from": "s-pan-c",
+     "to": "s-cat-c"
+    },
+    {
+     "from": "s-pan-c",
+     "to": "s-pay-c"
+    },
+    {
+     "from": "s-pay-c",
+     "to": "s-liv-c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "à déployer",
+     "value": 4
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s-cat",
+       "tone": "y"
+      }
+     ],
+     "say": "Chaque module est devenu un **service** : son code, **sa base**, son artefact."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s-cat",
+       "tone": "g"
+      },
+      {
+       "id": "s-pay-c",
+       "label": "v2",
+       "tone": "y"
+      }
+     ],
+     "say": "Le paiement change ? On ne déploie **que lui**."
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s-cat-c",
+       "label": "v1, inchangé"
+      },
+      {
+       "id": "s-pan-c",
+       "label": "v1, inchangé"
+      },
+      {
+       "id": "s-liv-c",
+       "label": "v1, inchangé"
+      }
+     ],
+     "say": "Les autres restent en v1, et continuent de servir."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-pan-c",
+      "s-pay-c"
+     ],
+     "label": "payer 1 290 €",
+     "reply": "payé",
+     "explain": [
+      "Les services se parlent **par le réseau**, par leurs API.",
+      "La réponse revient par le réseau aussi."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s-pay-c",
+       "tone": "v"
+      }
+     ],
+     "say": "Le prix de cette liberté : un appel réseau là où il y avait un appel de fonction."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}
