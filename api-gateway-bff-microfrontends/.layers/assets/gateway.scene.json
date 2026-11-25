@@ -1,0 +1,1263 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "api-gateway-bff-microfrontends",
+ "title": "Passerelle, BFF, micro-frontends",
+ "lang": "fr",
+ "kit": "plan",
+ "legend": [
+  {
+   "tone": "v",
+   "label": "interface"
+  },
+  {
+   "tone": "g",
+   "label": "service"
+  },
+  {
+   "tone": "y",
+   "label": "point d'entrée"
+  },
+  {
+   "tone": "n",
+   "label": "outil commun"
+  }
+ ],
+ "entities": [
+  {
+   "id": "a-web",
+   "kind": "node",
+   "at": [
+    -12,
+    -3
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    2.6,
+    1
+   ],
+   "title": "site web",
+   "detail": "Le **site web** de l'agence, dans le navigateur."
+  },
+  {
+   "id": "a-mob",
+   "kind": "node",
+   "at": [
+    -12,
+    3
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    2.6,
+    1
+   ],
+   "title": "appli mobile"
+  },
+  {
+   "id": "a-vol",
+   "kind": "node",
+   "at": [
+    10,
+    -6.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "vols",
+   "detail": "Sur le schéma, quatre **services**, chacun déployé seul."
+  },
+  {
+   "id": "a-hot",
+   "kind": "node",
+   "at": [
+    10,
+    -2.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "hôtels"
+  },
+  {
+   "id": "a-pay",
+   "kind": "node",
+   "at": [
+    10,
+    2.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "paiement"
+  },
+  {
+   "id": "a-avi",
+   "kind": "node",
+   "at": [
+    10,
+    6.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "avis"
+  },
+  {
+   "id": "b-web",
+   "kind": "node",
+   "at": [
+    -13,
+    -3
+   ],
+   "tone": "v",
+   "size": [
+    7,
+    2.6,
+    1
+   ],
+   "title": "site web"
+  },
+  {
+   "id": "b-mob",
+   "kind": "node",
+   "at": [
+    -13,
+    3
+   ],
+   "tone": "v",
+   "size": [
+    7,
+    2.6,
+    1
+   ],
+   "title": "appli mobile"
+  },
+  {
+   "id": "b-gw",
+   "kind": "node",
+   "at": [
+    -1.5,
+    0
+   ],
+   "tone": "y",
+   "size": [
+    8,
+    6.0,
+    1
+   ],
+   "title": "passerelle d'API",
+   "sub": "une seule adresse",
+   "detail": "La **passerelle d'API** (*API gateway*) : le seul point d'entrée. Elle reçoit tout, et route vers le bon service."
+  },
+  {
+   "id": "b-vol",
+   "kind": "node",
+   "at": [
+    11,
+    -6.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "vols"
+  },
+  {
+   "id": "b-hot",
+   "kind": "node",
+   "at": [
+    11,
+    -2.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "hôtels"
+  },
+  {
+   "id": "b-pay",
+   "kind": "node",
+   "at": [
+    11,
+    2.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "paiement"
+  },
+  {
+   "id": "b-avi",
+   "kind": "node",
+   "at": [
+    11,
+    6.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "avis"
+  },
+  {
+   "id": "c-gw",
+   "kind": "node",
+   "at": [
+    -12,
+    -2
+   ],
+   "tone": "y",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "passerelle d'API"
+  },
+  {
+   "id": "c-reg",
+   "kind": "node",
+   "at": [
+    -12,
+    5.5
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "annuaire de services",
+   "sub": "qui est où",
+   "detail": "L'**annuaire de services** (*service registry*) tient la liste des copies en service et de leurs adresses."
+  },
+  {
+   "id": "c-vol",
+   "kind": "layer",
+   "at": [
+    8,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    12,
+    13,
+    1
+   ],
+   "title": "service des vols",
+   "sub": "trois copies",
+   "detail": "Le même service tourne en **trois copies**, sur des machines qui changent."
+  },
+  {
+   "id": "c-v0",
+   "kind": "node",
+   "at": [
+    0,
+    -2.6
+   ],
+   "tone": "g",
+   "size": [
+    9,
+    2.4,
+    1
+   ],
+   "in": "c-vol",
+   "label": "10.0.1.7"
+  },
+  {
+   "id": "c-v1",
+   "kind": "node",
+   "at": [
+    0,
+    1.0
+   ],
+   "tone": "g",
+   "size": [
+    9,
+    2.4,
+    1
+   ],
+   "in": "c-vol",
+   "label": "10.0.2.3"
+  },
+  {
+   "id": "c-v2",
+   "kind": "node",
+   "at": [
+    0,
+    4.6
+   ],
+   "tone": "g",
+   "size": [
+    9,
+    2.4,
+    1
+   ],
+   "in": "c-vol",
+   "label": "10.0.3.9"
+  },
+  {
+   "id": "d-web",
+   "kind": "node",
+   "at": [
+    -14,
+    -4
+   ],
+   "tone": "v",
+   "size": [
+    6.6,
+    2.6,
+    1
+   ],
+   "title": "site web"
+  },
+  {
+   "id": "d-mob",
+   "kind": "node",
+   "at": [
+    -14,
+    4
+   ],
+   "tone": "v",
+   "size": [
+    6.6,
+    2.6,
+    1
+   ],
+   "title": "appli mobile"
+  },
+  {
+   "id": "d-bw",
+   "kind": "node",
+   "at": [
+    -3,
+    -4
+   ],
+   "tone": "y",
+   "size": [
+    7.4,
+    2.6,
+    1
+   ],
+   "title": "BFF du site",
+   "detail": "Un **BFF** (*Backend For Frontend*) : un petit back écrit **pour une seule interface**, qui assemble ce qu'elle affiche."
+  },
+  {
+   "id": "d-bm",
+   "kind": "node",
+   "at": [
+    -3,
+    4
+   ],
+   "tone": "y",
+   "size": [
+    7.4,
+    2.6,
+    1
+   ],
+   "title": "BFF mobile"
+  },
+  {
+   "id": "d-vol",
+   "kind": "node",
+   "at": [
+    11,
+    -5.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "vols"
+  },
+  {
+   "id": "d-hot",
+   "kind": "node",
+   "at": [
+    11,
+    0.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "hôtels"
+  },
+  {
+   "id": "d-avi",
+   "kind": "node",
+   "at": [
+    11,
+    5.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.4,
+    1
+   ],
+   "title": "avis"
+  },
+  {
+   "id": "e-page",
+   "kind": "layer",
+   "at": [
+    -3,
+    -1
+   ],
+   "tone": "v",
+   "size": [
+    22,
+    10,
+    1
+   ],
+   "title": "une page du site",
+   "sub": "vue par le visiteur",
+   "detail": "Pour le visiteur, **une seule page**. Derrière, plusieurs morceaux livrés par plusieurs équipes."
+  },
+  {
+   "id": "e-shell",
+   "kind": "node",
+   "at": [
+    0,
+    -2.0
+   ],
+   "tone": "n",
+   "size": [
+    19,
+    2.2,
+    1
+   ],
+   "in": "e-page",
+   "title": "application hôte (shell)",
+   "detail": "L'**application hôte** (*shell*) charge les morceaux, gère la navigation et la connexion."
+  },
+  {
+   "id": "e-f1",
+   "kind": "node",
+   "at": [
+    -6.2,
+    2.0
+   ],
+   "tone": "v",
+   "size": [
+    5.8,
+    3.2,
+    1
+   ],
+   "in": "e-page",
+   "title": "recherche",
+   "detail": "Chaque morceau est un **micro-frontend** : construit et déployé par son équipe."
+  },
+  {
+   "id": "e-f2",
+   "kind": "node",
+   "at": [
+    0,
+    2.0
+   ],
+   "tone": "v",
+   "size": [
+    5.8,
+    3.2,
+    1
+   ],
+   "in": "e-page",
+   "title": "hôtels"
+  },
+  {
+   "id": "e-f3",
+   "kind": "node",
+   "at": [
+    6.2,
+    2.0
+   ],
+   "tone": "v",
+   "size": [
+    5.8,
+    3.2,
+    1
+   ],
+   "in": "e-page",
+   "title": "avis"
+  },
+  {
+   "id": "e-ds",
+   "kind": "node",
+   "at": [
+    12.5,
+    -1
+   ],
+   "tone": "n",
+   "size": [
+    7,
+    4.4,
+    1
+   ],
+   "title": "design system",
+   "sub": "boutons, couleurs, polices",
+   "detail": "Le **design system** : des composants et des règles visuelles partagés par toutes les équipes."
+  }
+ ],
+ "steps": [
+  {
+   "id": "sans-passerelle",
+   "label": "Sans passerelle",
+   "title": "Sans passerelle : chaque appli parle à chaque service",
+   "body": [
+    "Deux applis, quatre services, et autant de chemins entre eux."
+   ],
+   "show": [
+    "a-web",
+    "a-mob",
+    "a-vol",
+    "a-hot",
+    "a-pay",
+    "a-avi"
+   ],
+   "links": [
+    {
+     "from": "a-web",
+     "to": "a-vol"
+    },
+    {
+     "from": "a-web",
+     "to": "a-hot"
+    },
+    {
+     "from": "a-web",
+     "to": "a-pay"
+    },
+    {
+     "from": "a-web",
+     "to": "a-avi"
+    },
+    {
+     "from": "a-mob",
+     "to": "a-vol"
+    },
+    {
+     "from": "a-mob",
+     "to": "a-hot"
+    },
+    {
+     "from": "a-mob",
+     "to": "a-pay"
+    },
+    {
+     "from": "a-mob",
+     "to": "a-avi"
+    }
+   ],
+   "hud": [
+    {
+     "label": "adresses",
+     "value": 4
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a-web",
+       "tone": "y"
+      },
+      {
+       "id": "a-mob",
+       "tone": "y"
+      }
+     ],
+     "say": "Chaque appli connaît **l'adresse des quatre services**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "a-mob",
+      "a-vol"
+     ],
+     "label": "vols ?"
+    },
+    {
+     "do": "send",
+     "path": [
+      "a-mob",
+      "a-hot"
+     ],
+     "label": "hôtels ?"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a-web",
+       "tone": "v"
+      },
+      {
+       "id": "a-mob",
+       "tone": "v"
+      },
+      {
+       "id": "a-vol",
+       "label": "vérifie le jeton"
+      },
+      {
+       "id": "a-hot",
+       "label": "vérifie le jeton"
+      },
+      {
+       "id": "a-pay",
+       "label": "vérifie le jeton"
+      },
+      {
+       "id": "a-avi",
+       "label": "vérifie le jeton"
+      }
+     ],
+     "say": "Chaque service vérifie lui-même **qui est connecté** : quatre fois le même code."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a-pay",
+       "tone": "r",
+       "label": "nouvelle adresse"
+      },
+      {
+       "id": "a-mob",
+       "tone": "r"
+      },
+      {
+       "id": "a-web",
+       "tone": "r"
+      }
+     ],
+     "say": "Le paiement change d'adresse : il faut **mettre à jour et republier** les deux applis."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "passerelle",
+   "label": "Passerelle",
+   "title": "La passerelle d'API : une seule porte d'entrée",
+   "body": [
+    "Une porte unique devant les services."
+   ],
+   "show": [
+    "b-web",
+    "b-mob",
+    "b-gw",
+    "b-vol",
+    "b-hot",
+    "b-pay",
+    "b-avi"
+   ],
+   "links": [
+    {
+     "from": "b-web",
+     "to": "b-gw"
+    },
+    {
+     "from": "b-mob",
+     "to": "b-gw"
+    },
+    {
+     "from": "b-gw",
+     "to": "b-vol"
+    },
+    {
+     "from": "b-gw",
+     "to": "b-hot"
+    },
+    {
+     "from": "b-gw",
+     "to": "b-pay"
+    },
+    {
+     "from": "b-gw",
+     "to": "b-avi"
+    }
+   ],
+   "hud": [
+    {
+     "label": "adresses",
+     "value": 1
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b-gw",
+       "label": "api.agence.fr"
+      }
+     ],
+     "say": "Les applis ne connaissent plus qu'**une adresse** : celle de la passerelle."
+    },
+    {
+     "do": "send",
+     "path": [
+      "b-mob",
+      "b-gw",
+      "b-vol"
+     ],
+     "label": "GET /vols",
+     "explain": [
+      "La requête arrive à la passerelle.",
+      "Elle la **route** vers le service des vols, d'après le chemin."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b-gw",
+       "label": "vérifie le jeton"
+      }
+     ],
+     "say": "Elle vérifie **une fois** qui est connecté, à la place de chaque service."
+    },
+    {
+     "do": "send",
+     "path": [
+      "b-web",
+      "b-gw",
+      "b-hot"
+     ],
+     "label": "GET /hotels"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b-gw",
+       "label": "100 requêtes / min"
+      }
+     ],
+     "say": "Elle peut aussi **limiter le débit** d'un client trop bavard, et tout journaliser."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b-pay",
+       "tone": "y",
+       "label": "nouvelle adresse"
+      },
+      {
+       "id": "b-gw",
+       "label": "route mise à jour"
+      }
+     ],
+     "say": "Le paiement change d'adresse ? Seule la **passerelle** est mise à jour."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "annuaire",
+   "label": "Annuaire",
+   "title": "L'annuaire de services : trouver des copies qui bougent",
+   "body": [
+    "Derrière la passerelle, les copies d'un service apparaissent et disparaissent."
+   ],
+   "show": [
+    "c-gw",
+    "c-vol",
+    "c-v0",
+    "c-v1",
+    "c-v2"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "copies",
+     "value": 3
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-v0",
+       "tone": "y"
+      },
+      {
+       "id": "c-v1",
+       "tone": "y"
+      },
+      {
+       "id": "c-v2",
+       "tone": "y"
+      }
+     ],
+     "say": "Trois copies du service des vols, chacune avec **son adresse**, qui change à chaque redémarrage."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "c-reg"
+     ],
+     "set": [
+      {
+       "id": "c-v0",
+       "tone": "g"
+      },
+      {
+       "id": "c-v1",
+       "tone": "g"
+      },
+      {
+       "id": "c-v2",
+       "tone": "g"
+      }
+     ],
+     "link": [
+      {
+       "from": "c-vol",
+       "to": "c-reg",
+       "dashed": true
+      }
+     ],
+     "say": "Au démarrage, chaque copie **s'inscrit** dans l'annuaire."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "link": [
+      {
+       "from": "c-gw",
+       "to": "c-reg"
+      }
+     ],
+     "say": "La passerelle **demande** à l'annuaire où sont les vols."
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-gw",
+      "c-reg"
+     ],
+     "label": "où sont les vols ?",
+     "reply": "3 adresses"
+    },
+    {
+     "do": "scene",
+     "link": [
+      {
+       "from": "c-gw",
+       "to": "c-v0"
+      },
+      {
+       "from": "c-gw",
+       "to": "c-v1"
+      },
+      {
+       "from": "c-gw",
+       "to": "c-v2"
+      }
+     ],
+     "say": "Puis elle envoie la requête à l'une des copies."
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-gw",
+      "c-v0"
+     ],
+     "label": "GET /vols"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-v1",
+       "tone": "r",
+       "label": "en panne"
+      }
+     ],
+     "unlink": [
+      {
+       "from": "c-gw",
+       "to": "c-v1"
+      }
+     ],
+     "hud": [
+      {
+       "label": "copies",
+       "value": 2
+      }
+     ],
+     "say": "Une copie tombe : l'annuaire la **retire** de la liste."
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-gw",
+      "c-v2"
+     ],
+     "label": "GET /vols"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-gw",
+       "label": "rien à changer"
+      }
+     ],
+     "say": "Les requêtes vont aux **deux copies restantes**, sans rien changer dans la passerelle."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "bff",
+   "label": "BFF",
+   "title": "Le BFF : un back taillé pour chaque interface",
+   "body": [
+    "Le site et l'appli n'affichent pas la même chose."
+   ],
+   "show": [
+    "d-web",
+    "d-mob",
+    "d-vol",
+    "d-hot",
+    "d-avi"
+   ],
+   "links": [],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-mob",
+       "label": "un résumé"
+      },
+      {
+       "id": "d-web",
+       "label": "page complète"
+      }
+     ],
+     "say": "L'écran d'un voyage sur mobile montre le vol, l'hôtel et une note. Le site affiche **beaucoup plus**."
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "show": [
+      "d-bw",
+      "d-bm"
+     ],
+     "link": [
+      {
+       "from": "d-web",
+       "to": "d-bw"
+      },
+      {
+       "from": "d-mob",
+       "to": "d-bm"
+      },
+      {
+       "from": "d-bw",
+       "to": "d-vol"
+      },
+      {
+       "from": "d-bw",
+       "to": "d-hot"
+      },
+      {
+       "from": "d-bw",
+       "to": "d-avi"
+      },
+      {
+       "from": "d-bm",
+       "to": "d-vol"
+      },
+      {
+       "from": "d-bm",
+       "to": "d-hot"
+      },
+      {
+       "from": "d-bm",
+       "to": "d-avi"
+      }
+     ],
+     "say": "Chaque interface reçoit **son BFF**, écrit par l'équipe qui fait cette interface."
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-mob",
+      "d-bm"
+     ],
+     "label": "écran voyage"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-bm",
+       "label": "assemble"
+      }
+     ],
+     "say": "Le BFF mobile appelle **les trois services**…"
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-bm",
+      "d-vol"
+     ],
+     "label": "vol"
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-bm",
+      "d-hot"
+     ],
+     "label": "hôtel"
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-bm",
+      "d-avi"
+     ],
+     "label": "note"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-bm",
+       "label": "3 Ko, un appel"
+      }
+     ],
+     "say": "…et renvoie **une seule réponse**, réduite à ce que l'écran affiche."
+    },
+    {
+     "do": "send",
+     "path": [
+      "d-bm",
+      "d-mob"
+     ],
+     "label": "résumé"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "d-bw",
+       "label": "page complète"
+      }
+     ],
+     "say": "Le site, lui, reçoit sa page complète par **son** BFF : chacun évolue sans gêner l'autre."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "micro-frontends",
+   "label": "Micro-frontends",
+   "title": "Micro-frontends : découper aussi l'interface",
+   "body": [
+    "Trois équipes, une seule page."
+   ],
+   "show": [
+    "e-page",
+    "e-shell",
+    "e-f1",
+    "e-f2",
+    "e-f3"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "à déployer",
+     "value": 1
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "e-page",
+       "tone": "y"
+      }
+     ],
+     "say": "Le back est découpé par équipe. Quand **l'interface** devient aussi grosse, on peut la découper pareil."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "e-page",
+       "tone": "v"
+      },
+      {
+       "id": "e-shell",
+       "tone": "y"
+      }
+     ],
+     "say": "Une **application hôte** charge les morceaux et gère la navigation."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "e-shell",
+       "tone": "n"
+      },
+      {
+       "id": "e-f1",
+       "label": "équipe Vols, v7"
+      },
+      {
+       "id": "e-f2",
+       "label": "équipe Hôtels, v3"
+      },
+      {
+       "id": "e-f3",
+       "label": "équipe Avis, v12"
+      }
+     ],
+     "hud": [
+      {
+       "label": "à déployer",
+       "value": 4
+      }
+     ],
+     "say": "Chaque morceau est un **micro-frontend**, livré par son équipe, à son rythme."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "show": [
+      "e-ds"
+     ],
+     "link": [
+      {
+       "from": "e-ds",
+       "to": "e-page",
+       "dashed": true
+      }
+     ],
+     "say": "Un **design system** partagé garde les boutons et les couleurs identiques partout."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "e-f2",
+       "tone": "r",
+       "label": "boutons v1 ≠ v2"
+      }
+     ],
+     "say": "Le prix : plus de code à charger, des **versions à aligner**, et une page qui dépend de quatre livraisons."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}
