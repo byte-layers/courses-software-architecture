@@ -1,0 +1,1210 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "communication-protocols",
+ "title": "Les protocoles entre programmes",
+ "lang": "fr",
+ "kit": "plan",
+ "legend": [
+  {
+   "tone": "v",
+   "label": "programme"
+  },
+  {
+   "tone": "g",
+   "label": "ce dont on parle"
+  },
+  {
+   "tone": "y",
+   "label": "contrat, attention"
+  }
+ ],
+ "entities": [
+  {
+   "id": "osi",
+   "kind": "layer",
+   "at": [
+    0,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    20,
+    20.5,
+    1
+   ],
+   "title": "modèle OSI",
+   "sub": "sept couches, un repère",
+   "detail": "Le **modèle OSI** range les protocoles réseau en sept couches. C'est un **repère** : les protocoles réels ne s'y rangent pas toujours exactement."
+  },
+  {
+   "id": "o7",
+   "kind": "node",
+   "at": [
+    0,
+    -6.0
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "7 · application",
+   "sub": "HTTP, gRPC, WebSocket, SMTP"
+  },
+  {
+   "id": "o6",
+   "kind": "node",
+   "at": [
+    0,
+    -3.75
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "6 · présentation",
+   "sub": "format, chiffrement"
+  },
+  {
+   "id": "o5",
+   "kind": "node",
+   "at": [
+    0,
+    -1.5
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "5 · session",
+   "sub": "ouverture, reprise"
+  },
+  {
+   "id": "o4",
+   "kind": "node",
+   "at": [
+    0,
+    0.75
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "4 · transport",
+   "sub": "TCP, UDP"
+  },
+  {
+   "id": "o3",
+   "kind": "node",
+   "at": [
+    0,
+    3.0
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "3 · réseau",
+   "sub": "IP : l'adresse de la machine"
+  },
+  {
+   "id": "o2",
+   "kind": "node",
+   "at": [
+    0,
+    5.25
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "2 · liaison",
+   "sub": "Ethernet, Wi-Fi"
+  },
+  {
+   "id": "o1",
+   "kind": "node",
+   "at": [
+    0,
+    7.5
+   ],
+   "tone": "n",
+   "size": [
+    18,
+    1.9,
+    1
+   ],
+   "in": "osi",
+   "title": "1 · physique",
+   "sub": "câble, ondes"
+  },
+  {
+   "id": "t-a",
+   "kind": "node",
+   "at": [
+    -12,
+    -4.5
+   ],
+   "tone": "v",
+   "size": [
+    6,
+    2.4,
+    1
+   ],
+   "title": "expéditeur",
+   "sub": "TCP"
+  },
+  {
+   "id": "t-b",
+   "kind": "node",
+   "at": [
+    12,
+    -4.5
+   ],
+   "tone": "v",
+   "size": [
+    6,
+    2.4,
+    1
+   ],
+   "title": "destinataire",
+   "sub": "TCP",
+   "detail": "Avec **TCP**, le destinataire accuse réception ; ce qui manque est renvoyé, et tout arrive dans l'ordre."
+  },
+  {
+   "id": "u-a",
+   "kind": "node",
+   "at": [
+    -12,
+    4.5
+   ],
+   "tone": "v",
+   "size": [
+    6,
+    2.4,
+    1
+   ],
+   "title": "expéditeur",
+   "sub": "UDP"
+  },
+  {
+   "id": "u-b",
+   "kind": "node",
+   "at": [
+    12,
+    4.5
+   ],
+   "tone": "v",
+   "size": [
+    6,
+    2.4,
+    1
+   ],
+   "title": "destinataire",
+   "sub": "UDP",
+   "detail": "Avec **UDP**, les paquets partent sans accusé de réception : ce qui se perd est perdu, rien ne ralentit."
+  },
+  {
+   "id": "r-app",
+   "kind": "node",
+   "at": [
+    -11,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "appli de suivi",
+   "detail": "L'appli du client parle à l'API du transporteur en **HTTP**."
+  },
+  {
+   "id": "r-api",
+   "kind": "layer",
+   "at": [
+    7,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    17,
+    13,
+    1
+   ],
+   "title": "API REST",
+   "sub": "des ressources, des verbes HTTP",
+   "detail": "**REST** organise une API HTTP autour de **ressources** (des colis) désignées par une adresse, et des **verbes** HTTP pour agir dessus."
+  },
+  {
+   "id": "r-1",
+   "kind": "node",
+   "at": [
+    0,
+    -3.9
+   ],
+   "tone": "n",
+   "size": [
+    15,
+    1.9,
+    1
+   ],
+   "in": "r-api",
+   "title": "GET /colis/42",
+   "sub": "lire un colis"
+  },
+  {
+   "id": "r-2",
+   "kind": "node",
+   "at": [
+    0,
+    -1.3
+   ],
+   "tone": "n",
+   "size": [
+    15,
+    1.9,
+    1
+   ],
+   "in": "r-api",
+   "title": "POST /colis",
+   "sub": "créer un colis"
+  },
+  {
+   "id": "r-3",
+   "kind": "node",
+   "at": [
+    0,
+    1.3
+   ],
+   "tone": "n",
+   "size": [
+    15,
+    1.9,
+    1
+   ],
+   "in": "r-api",
+   "title": "PATCH /colis/42",
+   "sub": "modifier l'adresse"
+  },
+  {
+   "id": "r-4",
+   "kind": "node",
+   "at": [
+    0,
+    3.9
+   ],
+   "tone": "n",
+   "size": [
+    15,
+    1.9,
+    1
+   ],
+   "in": "r-api",
+   "title": "DELETE /colis/42",
+   "sub": "annuler l'envoi"
+  },
+  {
+   "id": "g-app",
+   "kind": "node",
+   "at": [
+    -12,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    7,
+    3.0,
+    1
+   ],
+   "title": "appli mobile",
+   "sub": "un écran : colis, expéditeur, étapes"
+  },
+  {
+   "id": "g-c",
+   "kind": "node",
+   "at": [
+    2,
+    -5.5
+   ],
+   "tone": "n",
+   "size": [
+    9,
+    2.2,
+    1
+   ],
+   "title": "/colis/42"
+  },
+  {
+   "id": "g-e",
+   "kind": "node",
+   "at": [
+    2,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    9,
+    2.2,
+    1
+   ],
+   "title": "/expediteurs/7"
+  },
+  {
+   "id": "g-s",
+   "kind": "node",
+   "at": [
+    2,
+    5.5
+   ],
+   "tone": "n",
+   "size": [
+    9,
+    2.2,
+    1
+   ],
+   "title": "/colis/42/etapes"
+  },
+  {
+   "id": "g-gql",
+   "kind": "node",
+   "at": [
+    12,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "API GraphQL",
+   "sub": "une seule adresse",
+   "detail": "**GraphQL** : le client envoie une requête qui décrit **exactement les champs** qu'il veut ; le serveur répond avec ces champs, en une fois."
+  },
+  {
+   "id": "p-a",
+   "kind": "node",
+   "at": [
+    -11,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "service Tournées",
+   "detail": "Deux **services internes** du transporteur, qui s'appellent des milliers de fois par seconde."
+  },
+  {
+   "id": "p-b",
+   "kind": "node",
+   "at": [
+    11,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "service Position"
+  },
+  {
+   "id": "p-proto",
+   "kind": "node",
+   "at": [
+    0,
+    -6.0
+   ],
+   "tone": "y",
+   "size": [
+    11,
+    2.6,
+    1
+   ],
+   "title": "position.proto",
+   "sub": "le contrat, écrit une fois",
+   "detail": "Le fichier **.proto** décrit les appels et les messages. Un outil en **génère le code** des deux côtés, dans leurs langages."
+  },
+  {
+   "id": "s-nav",
+   "kind": "node",
+   "at": [
+    -11,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "page de suivi",
+   "sub": "la position du livreur"
+  },
+  {
+   "id": "s-srv",
+   "kind": "node",
+   "at": [
+    11,
+    0
+   ],
+   "tone": "v",
+   "size": [
+    8,
+    3.0,
+    1
+   ],
+   "title": "serveur"
+  }
+ ],
+ "steps": [
+  {
+   "id": "osi",
+   "label": "OSI",
+   "title": "Le modèle OSI, un repère pour ranger les protocoles",
+   "body": [
+    "Chaque protocole s'appuie sur celui du dessous, comme une lettre dans une enveloppe, dans un sac postal."
+   ],
+   "show": [
+    "osi",
+    "o7",
+    "o6",
+    "o5",
+    "o4",
+    "o3",
+    "o2",
+    "o1"
+   ],
+   "links": [],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o1",
+       "tone": "y"
+      },
+      {
+       "id": "o2",
+       "tone": "y"
+      }
+     ],
+     "say": "En bas, le **câble** ou les ondes, puis le réseau local."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o1",
+       "tone": "n"
+      },
+      {
+       "id": "o2",
+       "tone": "n"
+      },
+      {
+       "id": "o3",
+       "tone": "y"
+      }
+     ],
+     "say": "**IP** amène les paquets jusqu'à la bonne **machine**, grâce à son adresse."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o3",
+       "tone": "n"
+      },
+      {
+       "id": "o4",
+       "tone": "g"
+      }
+     ],
+     "say": "**TCP** ou **UDP** les amènent jusqu'au bon **programme**, grâce à un numéro de port."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o7",
+       "tone": "g"
+      }
+     ],
+     "say": "Tout en haut, le protocole d'**application** : ce que les programmes se disent."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "osi",
+       "tone": "g"
+      }
+     ],
+     "say": "Ce contenu parle de ces deux couches : **transport** et **application**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "tcp-udp",
+   "label": "TCP, UDP",
+   "title": "TCP ou UDP : livraison garantie, ou livraison rapide",
+   "body": [
+    "Quatre paquets partent. Le troisième se perd en route."
+   ],
+   "show": [
+    "t-a",
+    "t-b",
+    "u-a",
+    "u-b"
+   ],
+   "links": [
+    {
+     "from": "t-a",
+     "to": "t-b"
+    },
+    {
+     "from": "u-a",
+     "to": "u-b"
+    }
+   ],
+   "hud": [
+    {
+     "label": "TCP reçus",
+     "value": "0 / 4"
+    },
+    {
+     "label": "UDP reçus",
+     "value": "0 / 4"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "t-a",
+      "t-b"
+     ],
+     "label": "1, 2",
+     "reply": "reçu 1, 2"
+    },
+    {
+     "do": "send",
+     "path": [
+      "t-a",
+      "t-b"
+     ],
+     "label": "3",
+     "reply": "3 manque"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "t-b",
+       "label": "attend le 3"
+      }
+     ],
+     "hud": [
+      {
+       "label": "TCP reçus",
+       "value": "2 / 4",
+       "tone": "y"
+      }
+     ],
+     "say": "TCP : le destinataire signale qu'il manque le **3**. L'expéditeur le **renvoie**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "t-a",
+      "t-b"
+     ],
+     "label": "3, 4",
+     "reply": "reçu 3, 4"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "t-b",
+       "label": null,
+       "tone": "g"
+      }
+     ],
+     "hud": [
+      {
+       "label": "TCP reçus",
+       "value": "4 / 4",
+       "tone": "g"
+      }
+     ],
+     "say": "Tout arrive, **dans l'ordre**, un peu plus tard."
+    },
+    {
+     "do": "wait",
+     "ms": 600
+    },
+    {
+     "do": "send",
+     "path": [
+      "u-a",
+      "u-b"
+     ],
+     "label": "1, 2, 4"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "u-b",
+       "label": "le 3 manque",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "UDP reçus",
+       "value": "3 / 4",
+       "tone": "y"
+      }
+     ],
+     "say": "UDP : le 3 est **perdu**, personne ne le redemande. Mais rien n'a attendu."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "rest",
+   "label": "REST",
+   "title": "REST : des ressources et des verbes, sur HTTP",
+   "body": [
+    "Une seule ressource, le colis 42, et quatre façons d'agir dessus."
+   ],
+   "show": [
+    "r-app",
+    "r-api",
+    "r-1",
+    "r-2",
+    "r-3",
+    "r-4"
+   ],
+   "links": [
+    {
+     "from": "r-app",
+     "to": "r-1"
+    },
+    {
+     "from": "r-app",
+     "to": "r-2"
+    },
+    {
+     "from": "r-app",
+     "to": "r-3"
+    },
+    {
+     "from": "r-app",
+     "to": "r-4"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "r-app",
+      "r-1"
+     ],
+     "label": "GET /colis/42",
+     "reply": "{\"etat\": \"en route\"}",
+     "explain": [
+      "L'appli **lit** le colis : le verbe GET, l'adresse du colis.",
+      "L'API répond en JSON, avec le code 200."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r-1",
+       "tone": "g"
+      }
+     ],
+     "say": "L'adresse désigne **quoi** (le colis 42), le verbe dit **ce qu'on fait**."
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "r-app",
+      "r-3"
+     ],
+     "label": "PATCH adresse",
+     "reply": "200"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r-1",
+       "tone": "n"
+      },
+      {
+       "id": "r-3",
+       "tone": "g"
+      }
+     ],
+     "say": "Même adresse, autre verbe : on **modifie** l'adresse de livraison."
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r-api",
+       "tone": "g"
+      }
+     ],
+     "say": "Simple, lisible, compris partout : c'est la forme la plus courante des API web."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "graphql",
+   "label": "GraphQL",
+   "title": "GraphQL : le client demande exactement ce qu'il affiche",
+   "body": [
+    "Un écran de l'appli mobile affiche le colis, son expéditeur et ses trois dernières étapes."
+   ],
+   "show": [
+    "g-app",
+    "g-c",
+    "g-e",
+    "g-s"
+   ],
+   "links": [
+    {
+     "from": "g-app",
+     "to": "g-c"
+    },
+    {
+     "from": "g-app",
+     "to": "g-e"
+    },
+    {
+     "from": "g-app",
+     "to": "g-s"
+    }
+   ],
+   "hud": [
+    {
+     "label": "requêtes",
+     "value": "0"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "g-app",
+      "g-c"
+     ],
+     "label": "GET",
+     "reply": "colis complet"
+    },
+    {
+     "do": "send",
+     "path": [
+      "g-app",
+      "g-e"
+     ],
+     "label": "GET",
+     "reply": "expéditeur complet"
+    },
+    {
+     "do": "send",
+     "path": [
+      "g-app",
+      "g-s"
+     ],
+     "label": "GET",
+     "reply": "toutes les étapes"
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "requêtes",
+       "value": "3",
+       "tone": "y"
+      }
+     ],
+     "say": "En REST : **trois requêtes**, et des réponses plus grosses que ce que l'écran affiche."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "g-gql"
+     ],
+     "hide": [
+      "g-c",
+      "g-e",
+      "g-s"
+     ],
+     "link": [
+      {
+       "from": "g-app",
+       "to": "g-gql"
+      }
+     ],
+     "hud": [
+      {
+       "label": "requêtes",
+       "value": "0",
+       "tone": null
+      }
+     ],
+     "say": "Avec **GraphQL**, une seule adresse."
+    },
+    {
+     "do": "send",
+     "path": [
+      "g-app",
+      "g-gql"
+     ],
+     "label": "colis { état, étapes }",
+     "reply": "ces champs-là",
+     "explain": [
+      "L'appli décrit **les champs** dont l'écran a besoin.",
+      "Le serveur répond avec eux, et rien d'autre."
+     ]
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "requêtes",
+       "value": "1",
+       "tone": "g"
+      }
+     ],
+     "say": "**Une requête**, la réponse taillée pour l'écran. En échange, un serveur plus complexe à écrire et à protéger."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "grpc",
+   "label": "gRPC",
+   "title": "gRPC : un contrat strict et des messages compacts, entre services",
+   "body": [
+    "Deux services internes qui se parlent des milliers de fois par seconde."
+   ],
+   "show": [
+    "p-a",
+    "p-b"
+   ],
+   "links": [
+    {
+     "from": "p-a",
+     "to": "p-b"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "show": [
+      "p-proto"
+     ],
+     "link": [
+      {
+       "from": "p-proto",
+       "to": "p-a",
+       "dashed": true
+      },
+      {
+       "from": "p-proto",
+       "to": "p-b",
+       "dashed": true
+      }
+     ],
+     "say": "D'abord un **contrat** : le fichier .proto décrit les appels et les messages."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "p-a",
+       "label": "code généré"
+      },
+      {
+       "id": "p-b",
+       "label": "code généré"
+      }
+     ],
+     "say": "Un outil en **génère le code** des deux côtés : on appelle le service distant comme une fonction."
+    },
+    {
+     "do": "send",
+     "path": [
+      "p-a",
+      "p-b"
+     ],
+     "label": "Position(livreur 12)",
+     "reply": "48.85, 2.35",
+     "explain": [
+      "Tournées appelle Position : le message part en **binaire**, compact, sur HTTP/2.",
+      "La réponse revient dans le format du contrat."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "p-proto",
+       "tone": "g"
+      }
+     ],
+     "say": "Rapide et typé, mais peu lisible à l'œil et mal compris des navigateurs : on le garde **entre services**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "temps-reel",
+   "label": "Temps réel",
+   "title": "Polling, SSE, WebSocket : quand le serveur a quelque chose à dire",
+   "body": [
+    "La page de suivi doit montrer le livreur qui avance. En HTTP, c'est toujours le client qui demande."
+   ],
+   "show": [
+    "s-nav",
+    "s-srv"
+   ],
+   "links": [
+    {
+     "from": "s-nav",
+     "to": "s-srv"
+    }
+   ],
+   "hud": [
+    {
+     "label": "technique",
+     "value": "—"
+    },
+    {
+     "label": "pour rien",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "technique",
+       "value": "polling"
+      }
+     ],
+     "say": "**Polling** : la page redemande toutes les cinq secondes."
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-nav",
+      "s-srv"
+     ],
+     "label": "du neuf ?",
+     "reply": "non"
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-nav",
+      "s-srv"
+     ],
+     "label": "du neuf ?",
+     "reply": "non"
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-nav",
+      "s-srv"
+     ],
+     "label": "du neuf ?",
+     "reply": "il a bougé"
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "pour rien",
+       "value": "2 sur 3",
+       "tone": "y"
+      }
+     ],
+     "say": "Simple, mais la plupart des réponses disent « rien de neuf »."
+    },
+    {
+     "do": "wait",
+     "ms": 700
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "technique",
+       "value": "SSE"
+      },
+      {
+       "label": "pour rien",
+       "value": "0",
+       "tone": "g"
+      }
+     ],
+     "say": "**SSE** : une connexion reste ouverte, le **serveur envoie** quand il a du neuf."
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-srv",
+      "s-nav"
+     ],
+     "label": "position"
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-srv",
+      "s-nav"
+     ],
+     "label": "position"
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "technique",
+       "value": "WebSocket"
+      }
+     ],
+     "say": "**WebSocket** : une connexion dans les **deux sens**, pour écrire aussi au livreur."
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-nav",
+      "s-srv"
+     ],
+     "label": "sonnez au 2e"
+    },
+    {
+     "do": "send",
+     "path": [
+      "s-srv",
+      "s-nav"
+     ],
+     "label": "bien reçu"
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}
