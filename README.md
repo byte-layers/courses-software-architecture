@@ -18,8 +18,9 @@ Les contenus byte_layers sur l'architecture logicielle et le system design, pour
 | `replication-sharding-cap/` | Réplication, partitionnement et théorème CAP | bit |
 | `high-availability/` | Rester en service : SPOF, redondance, bascule | bit |
 | `architecture-case-studies/` | Six organisations, six architectures | bit |
+| `ride-hailing-design-challenge/` | Découper une application de VTC | challenge |
 
-Quatre familles, lisibles dans cet ordre : organiser le code (les deux premiers), découper en services (les trois suivants), faire communiquer les programmes (quatre), tenir la charge et rester en service (quatre), puis les cas d'organisations. Chaque contenu a son tag, de la forme `<dossier>/vN`. Les bits avec un playground demandent l'extension 0.11.0 (`scaling-load-balancing`) ou 0.12.0 (`sync-async-communication`, `queues-and-event-logs`) ; les autres, 0.8.0.
+Quatre familles, lisibles dans cet ordre : organiser le code (les deux premiers), découper en services (les trois suivants), faire communiquer les programmes (quatre), tenir la charge et rester en service (quatre), puis les cas d'organisations et le challenge de découpage. Chaque contenu a son tag, de la forme `<dossier>/vN`. Les bits avec un playground demandent l'extension 0.11.0 (`scaling-load-balancing`) ou 0.12.0 (`sync-async-communication`, `queues-and-event-logs`) ; les autres, 0.8.0.
 
 ## Régénérer un schéma animé
 
