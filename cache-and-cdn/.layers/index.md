@@ -146,7 +146,7 @@ questions:
 ## Récap
 
 - Beaucoup de demandes identiques : on garde une **copie** de la réponse plutôt que de refaire le travail.
-- **Cache** : consulté d'abord ; **défaut** (*miss*) → on lit la source et on range ; **succès** (*hit*) → réponse immédiate.
+- **Cache** : consulté d'abord . En cas de **défaut** (*miss*), on lit la source et on range la copie ; en cas de **succès** (*hit*), la réponse est immédiate.
 - Une copie peut être **périmée** : **durée de vie** (*TTL*) et **invalidation** à l'écriture.
 - **CDN** : des copies des fichiers près des lecteurs ; le **serveur d'origine** garde la référence.
 - On ne met pas en cache partagé ce qui est **propre à chacun**, ni ce qui doit être **exact** au moment d'agir.
