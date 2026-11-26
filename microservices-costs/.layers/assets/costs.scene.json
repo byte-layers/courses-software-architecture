@@ -1,0 +1,1159 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "microservices-costs",
+ "title": "Le prix des micro-services",
+ "lang": "fr",
+ "kit": "plan",
+ "legend": [
+  {
+   "tone": "g",
+   "label": "service"
+  },
+  {
+   "tone": "v",
+   "label": "code"
+  },
+  {
+   "tone": "y",
+   "label": "journal, mesure"
+  }
+ ],
+ "entities": [
+  {
+   "id": "n-mono",
+   "kind": "layer",
+   "at": [
+    -9.0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    13,
+    9,
+    1
+   ],
+   "title": "un seul programme",
+   "detail": "Dans un monolithe, le module Commandes appelle le module Paiement comme une fonction : dans la même mémoire."
+  },
+  {
+   "id": "n-cmd",
+   "kind": "node",
+   "at": [
+    0,
+    -2.0
+   ],
+   "tone": "v",
+   "size": [
+    10.5,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "commandes"
+  },
+  {
+   "id": "n-pay",
+   "kind": "node",
+   "at": [
+    0,
+    2.4
+   ],
+   "tone": "v",
+   "size": [
+    10.5,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "paiement"
+  },
+  {
+   "id": "n-s1",
+   "kind": "layer",
+   "at": [
+    9.0,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    12,
+    4.4,
+    1
+   ],
+   "title": "service Commandes",
+   "detail": "Deux services : deux programmes, souvent sur deux machines. Entre eux, le réseau."
+  },
+  {
+   "id": "n-s1c",
+   "kind": "node",
+   "at": [
+    0,
+    0.6
+   ],
+   "tone": "v",
+   "size": [
+    10,
+    1.9,
+    1
+   ],
+   "in": "n-s1",
+   "title": "commandes"
+  },
+  {
+   "id": "n-s2",
+   "kind": "layer",
+   "at": [
+    9.0,
+    4.4
+   ],
+   "tone": "g",
+   "size": [
+    12,
+    4.4,
+    1
+   ],
+   "title": "service Paiement"
+  },
+  {
+   "id": "n-s2c",
+   "kind": "node",
+   "at": [
+    0,
+    0.6
+   ],
+   "tone": "v",
+   "size": [
+    10,
+    1.9,
+    1
+   ],
+   "in": "n-s2",
+   "title": "paiement"
+  },
+  {
+   "id": "c-cmd",
+   "kind": "layer",
+   "at": [
+    -9.0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    12,
+    6,
+    1
+   ],
+   "title": "service Commandes",
+   "detail": "Le service Commandes expose une **API** : la liste des demandes qu'il accepte et de ce qu'il répond. C'est un **contrat**."
+  },
+  {
+   "id": "c-cmdv",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "v",
+   "size": [
+    10,
+    1.9,
+    1
+   ],
+   "in": "c-cmd",
+   "title": "API v1",
+   "sub": "champ « adresse »"
+  },
+  {
+   "id": "c-res",
+   "kind": "layer",
+   "at": [
+    9.0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    12,
+    6,
+    1
+   ],
+   "title": "service Restaurants",
+   "detail": "Le service Restaurants lit les commandes par cette API. Il est déployé par une autre équipe, à un autre moment."
+  },
+  {
+   "id": "c-resv",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "v",
+   "size": [
+    10,
+    1.9,
+    1
+   ],
+   "in": "c-res",
+   "title": "lit « adresse »"
+  },
+  {
+   "id": "o-gw",
+   "kind": "layer",
+   "at": [
+    -12.0,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    10,
+    5.2,
+    1
+   ],
+   "title": "accueil",
+   "detail": "Sur le schéma, cinq services, chacun sur sa machine, chacun avec **son propre journal**."
+  },
+  {
+   "id": "o-gw-log",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "y",
+   "size": [
+    8.4,
+    1.6,
+    1
+   ],
+   "in": "o-gw",
+   "title": "son journal",
+   "detail": "Le **journal** (*log*) : les lignes qu'un programme écrit pour dire ce qu'il fait et ce qui rate."
+  },
+  {
+   "id": "o-cmd",
+   "kind": "layer",
+   "at": [
+    0.0,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    10,
+    5.2,
+    1
+   ],
+   "title": "commandes"
+  },
+  {
+   "id": "o-cmd-log",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "y",
+   "size": [
+    8.4,
+    1.6,
+    1
+   ],
+   "in": "o-cmd"
+  },
+  {
+   "id": "o-res",
+   "kind": "layer",
+   "at": [
+    12.0,
+    -4.0
+   ],
+   "tone": "g",
+   "size": [
+    10,
+    5.2,
+    1
+   ],
+   "title": "restaurants"
+  },
+  {
+   "id": "o-res-log",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "y",
+   "size": [
+    8.4,
+    1.6,
+    1
+   ],
+   "in": "o-res"
+  },
+  {
+   "id": "o-pay",
+   "kind": "layer",
+   "at": [
+    -6.0,
+    3.0
+   ],
+   "tone": "g",
+   "size": [
+    10,
+    5.2,
+    1
+   ],
+   "title": "paiement"
+  },
+  {
+   "id": "o-pay-log",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "y",
+   "size": [
+    8.4,
+    1.6,
+    1
+   ],
+   "in": "o-pay"
+  },
+  {
+   "id": "o-not",
+   "kind": "layer",
+   "at": [
+    6.0,
+    3.0
+   ],
+   "tone": "g",
+   "size": [
+    10,
+    5.2,
+    1
+   ],
+   "title": "notifications"
+  },
+  {
+   "id": "o-not-log",
+   "kind": "node",
+   "at": [
+    0,
+    0.8
+   ],
+   "tone": "y",
+   "size": [
+    8.4,
+    1.6,
+    1
+   ],
+   "in": "o-not"
+  },
+  {
+   "id": "o-central",
+   "kind": "node",
+   "at": [
+    0,
+    10.0
+   ],
+   "tone": "y",
+   "size": [
+    20,
+    2.4,
+    1
+   ],
+   "title": "journaux centralisés",
+   "sub": "tous les services, un seul endroit",
+   "detail": "Un outil reçoit les journaux de tous les services (Loki, Elasticsearch…) : on cherche au même endroit."
+  },
+  {
+   "id": "w-left",
+   "kind": "layer",
+   "at": [
+    -9.0,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    16.5,
+    14,
+    1
+   ],
+   "title": "plutôt un monolithe modulaire",
+   "detail": "Dans ces situations, les micro-services ajoutent leurs coûts sans rien apporter."
+  },
+  {
+   "id": "w-right",
+   "kind": "layer",
+   "at": [
+    9.0,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    16.5,
+    14,
+    1
+   ],
+   "title": "les micro-services se justifient",
+   "detail": "Dans ces situations, déployer chaque partie seule apporte plus que ce que ça coûte."
+  },
+  {
+   "id": "w1",
+   "kind": "node",
+   "at": [
+    0,
+    -3.6
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-left",
+   "title": "une petite équipe",
+   "sub": "un seul produit"
+  },
+  {
+   "id": "w2",
+   "kind": "node",
+   "at": [
+    0,
+    -0.8000000000000003
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-left",
+   "title": "un métier qui bouge",
+   "sub": "chaque semaine"
+  },
+  {
+   "id": "w3",
+   "kind": "node",
+   "at": [
+    0,
+    1.9999999999999996
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-left",
+   "title": "pas d'outillage",
+   "sub": "ni déploiement automatique, ni supervision"
+  },
+  {
+   "id": "w4",
+   "kind": "node",
+   "at": [
+    0,
+    4.799999999999999
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-left",
+   "title": "une charge uniforme",
+   "sub": "tout monte en même temps"
+  },
+  {
+   "id": "y1",
+   "kind": "node",
+   "at": [
+    0,
+    -3.6
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-right",
+   "title": "plusieurs équipes",
+   "sub": "chacune son domaine"
+  },
+  {
+   "id": "y2",
+   "kind": "node",
+   "at": [
+    0,
+    -0.8000000000000003
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-right",
+   "title": "des rythmes différents",
+   "sub": "chaque partie livre à son pas"
+  },
+  {
+   "id": "y3",
+   "kind": "node",
+   "at": [
+    0,
+    1.9999999999999996
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-right",
+   "title": "une charge à part",
+   "sub": "une partie doit tenir seule un pic"
+  },
+  {
+   "id": "y4",
+   "kind": "node",
+   "at": [
+    0,
+    4.799999999999999
+   ],
+   "tone": "n",
+   "size": [
+    14.5,
+    2.2,
+    1
+   ],
+   "in": "w-right",
+   "title": "un outillage mûr",
+   "sub": "déploiement et supervision automatisés"
+  }
+ ],
+ "steps": [
+  {
+   "id": "appel-reseau",
+   "label": "Appel réseau",
+   "title": "Un appel de fonction devient un appel réseau",
+   "body": [
+    "La même demande, « payer cette commande », dans un programme ou entre deux services."
+   ],
+   "show": [
+    "n-mono",
+    "n-cmd",
+    "n-pay"
+   ],
+   "links": [
+    {
+     "from": "n-cmd",
+     "to": "n-pay"
+    }
+   ],
+   "hud": [
+    {
+     "label": "en mémoire",
+     "value": "—"
+    },
+    {
+     "label": "par le réseau",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "n-cmd",
+      "n-pay"
+     ],
+     "label": "payer",
+     "reply": "payé",
+     "explain": [
+      "Dans un seul programme, Commandes appelle Paiement comme une **fonction**.",
+      "La réponse arrive presque aussitôt."
+     ]
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "en mémoire",
+       "value": "< 0,01 ms",
+       "tone": "g"
+      }
+     ],
+     "say": "Un appel de fonction : quelques **microsecondes**, et il ne se perd pas en route."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "n-s1",
+      "n-s1c",
+      "n-s2",
+      "n-s2c"
+     ],
+     "link": [
+      {
+       "from": "n-s1c",
+       "to": "n-s2c",
+       "dashed": true
+      }
+     ],
+     "say": "Avec deux services, la même demande traverse **le réseau**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "n-s1c",
+      "n-s2c"
+     ],
+     "label": "payer",
+     "reply": "payé",
+     "explain": [
+      "La demande part sur le réseau, vers une autre machine.",
+      "La réponse refait le chemin inverse."
+     ]
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "par le réseau",
+       "value": "5 à 50 ms",
+       "tone": "y"
+      }
+     ],
+     "say": "Quelques **millisecondes** à chaque appel, et l'appel peut **échouer** : réseau coupé, service arrêté."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-s2",
+       "tone": "y"
+      }
+     ],
+     "say": "Une page qui enchaîne dix appels paie dix fois ce prix."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "contrats",
+   "label": "Contrats",
+   "title": "Plusieurs déploiements, un contrat à tenir",
+   "body": [
+    "Deux équipes, deux services, deux calendriers de mise en service."
+   ],
+   "show": [
+    "c-cmd",
+    "c-cmdv",
+    "c-res",
+    "c-resv"
+   ],
+   "links": [
+    {
+     "from": "c-resv",
+     "to": "c-cmdv",
+     "dashed": true
+    }
+   ],
+   "hud": [
+    {
+     "label": "commandes lues",
+     "value": "oui"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-resv",
+      "c-cmdv"
+     ],
+     "label": "commande 42 ?",
+     "reply": "adresse : 3 rue…"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-cmdv",
+       "title": "API v2",
+       "sub": "champ « livraison »",
+       "tone": "y"
+      }
+     ],
+     "say": "L'équipe Commandes renomme le champ « adresse » en « livraison », et déploie."
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-resv",
+      "c-cmdv"
+     ],
+     "label": "commande 42 ?",
+     "reply": "champ inconnu"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-resv",
+       "tone": "r",
+       "label": "adresse introuvable"
+      }
+     ],
+     "hud": [
+      {
+       "label": "commandes lues",
+       "value": "non",
+       "tone": "r"
+      }
+     ],
+     "say": "Restaurants n'a pas été redéployé : il cherche encore « adresse ». **Il casse**."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-cmdv",
+       "title": "API v1 et v2",
+       "sub": "les deux, le temps de migrer",
+       "tone": "g"
+      },
+      {
+       "id": "c-resv",
+       "tone": "v",
+       "label": null
+      }
+     ],
+     "hud": [
+      {
+       "label": "commandes lues",
+       "value": "oui",
+       "tone": "g"
+      }
+     ],
+     "say": "La parade : un **contrat versionné**. La v1 reste servie tant que quelqu'un s'en sert."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "deboguer",
+   "label": "Déboguer",
+   "title": "Une erreur, cinq programmes : où chercher ?",
+   "body": [
+    "Un client voit « Erreur, réessayez plus tard ». La commande a traversé quatre services."
+   ],
+   "show": [
+    "o-gw",
+    "o-gw-log",
+    "o-cmd",
+    "o-cmd-log",
+    "o-res",
+    "o-res-log",
+    "o-pay",
+    "o-pay-log",
+    "o-not",
+    "o-not-log"
+   ],
+   "links": [
+    {
+     "from": "o-gw",
+     "to": "o-cmd"
+    },
+    {
+     "from": "o-cmd",
+     "to": "o-res"
+    },
+    {
+     "from": "o-cmd",
+     "to": "o-pay"
+    },
+    {
+     "from": "o-pay",
+     "to": "o-not"
+    }
+   ],
+   "hud": [
+    {
+     "label": "journaux à lire",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "send",
+     "path": [
+      "o-gw",
+      "o-cmd",
+      "o-pay",
+      "o-not"
+     ],
+     "label": "commande",
+     "explain": [
+      "L'accueil reçoit la commande et la passe au service Commandes.",
+      "Commandes demande le paiement.",
+      "Paiement prévient Notifications… qui échoue."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-not",
+       "tone": "r"
+      },
+      {
+       "id": "o-gw-log",
+       "label": "erreur 500"
+      }
+     ],
+     "say": "Notifications échoue. Le client, lui, ne voit qu'une **erreur générique**."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-gw-log",
+       "tone": "r"
+      },
+      {
+       "id": "o-cmd-log",
+       "tone": "r"
+      },
+      {
+       "id": "o-res-log",
+       "tone": "r"
+      },
+      {
+       "id": "o-pay-log",
+       "tone": "r"
+      },
+      {
+       "id": "o-not-log",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "journaux à lire",
+       "value": "5",
+       "tone": "r"
+      }
+     ],
+     "say": "Pour comprendre, il faut lire **cinq journaux**, sur cinq machines, et deviner quelles lignes vont ensemble."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "observer",
+   "label": "Observer",
+   "title": "Observabilité : journaux centralisés et identifiant de corrélation",
+   "body": [
+    "Le même système, mais équipé pour qu'on le comprenne de l'extérieur."
+   ],
+   "show": [
+    "o-gw",
+    "o-gw-log",
+    "o-cmd",
+    "o-cmd-log",
+    "o-res",
+    "o-res-log",
+    "o-pay",
+    "o-pay-log",
+    "o-not",
+    "o-not-log"
+   ],
+   "links": [
+    {
+     "from": "o-gw",
+     "to": "o-cmd"
+    },
+    {
+     "from": "o-cmd",
+     "to": "o-res"
+    },
+    {
+     "from": "o-cmd",
+     "to": "o-pay"
+    },
+    {
+     "from": "o-pay",
+     "to": "o-not"
+    }
+   ],
+   "hud": [
+    {
+     "label": "journaux à lire",
+     "value": "5"
+    },
+    {
+     "label": "identifiant",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "show": [
+      "o-central"
+     ],
+     "link": [
+      {
+       "from": "o-gw-log",
+       "to": "o-central",
+       "dashed": true
+      },
+      {
+       "from": "o-cmd-log",
+       "to": "o-central",
+       "dashed": true
+      },
+      {
+       "from": "o-res-log",
+       "to": "o-central",
+       "dashed": true
+      },
+      {
+       "from": "o-pay-log",
+       "to": "o-central",
+       "dashed": true
+      },
+      {
+       "from": "o-not-log",
+       "to": "o-central",
+       "dashed": true
+      }
+     ],
+     "hud": [
+      {
+       "label": "journaux à lire",
+       "value": "1 endroit",
+       "tone": "g"
+      }
+     ],
+     "say": "Chaque service envoie ses journaux à **un seul endroit**.",
+     "ms": 1000
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-gw-log",
+       "label": "id 7f3a"
+      }
+     ],
+     "hud": [
+      {
+       "label": "identifiant",
+       "value": "7f3a",
+       "tone": "y"
+      }
+     ],
+     "say": "À l'entrée, la requête reçoit un **identifiant de corrélation**, que chaque service recopie."
+    },
+    {
+     "do": "send",
+     "path": [
+      "o-gw",
+      "o-cmd",
+      "o-pay",
+      "o-not"
+     ],
+     "label": "id 7f3a",
+     "explain": [
+      "L'accueil transmet l'identifiant avec la commande.",
+      "Commandes le transmet au paiement.",
+      "Paiement le transmet à Notifications."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-cmd-log",
+       "label": "id 7f3a"
+      },
+      {
+       "id": "o-res-log",
+       "label": "id 7f3a"
+      },
+      {
+       "id": "o-pay-log",
+       "label": "id 7f3a"
+      },
+      {
+       "id": "o-not-log",
+       "label": "id 7f3a"
+      },
+      {
+       "id": "o-res-log",
+       "label": null
+      }
+     ],
+     "say": "Chacun l'écrit dans ses lignes de journal."
+    },
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-not",
+       "tone": "r"
+      },
+      {
+       "id": "o-central",
+       "label": "7f3a : notifications, délai dépassé"
+      }
+     ],
+     "say": "Une recherche « 7f3a » montre **tout le parcours**, et la ligne qui a échoué."
+    },
+    {
+     "do": "wait",
+     "ms": 3200
+    }
+   ]
+  },
+  {
+   "id": "quand-pas",
+   "label": "Quand s'en passer",
+   "title": "Quand ne pas faire de micro-services",
+   "body": [
+    "Les micro-services répondent à des problèmes d'organisation et de charge. Sans ces problèmes, ils ne répondent à rien."
+   ],
+   "show": [
+    "w-left",
+    "w-right"
+   ],
+   "links": [],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "show": [
+      "w1",
+      "w2",
+      "w3",
+      "w4"
+     ],
+     "set": [
+      {
+       "id": "w-left",
+       "tone": "y"
+      }
+     ],
+     "say": "À gauche, des situations où **un monolithe modulaire** suffit."
+    },
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "show": [
+      "y1",
+      "y2",
+      "y3",
+      "y4"
+     ],
+     "set": [
+      {
+       "id": "w-left",
+       "tone": "n"
+      },
+      {
+       "id": "w-right",
+       "tone": "g"
+      }
+     ],
+     "say": "À droite, celles où déployer chaque partie **seule** vaut son prix."
+    },
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "w3",
+       "tone": "r"
+      },
+      {
+       "id": "y4",
+       "tone": "y"
+      }
+     ],
+     "say": "Sans outillage, rien ne compense : c'est la condition qui passe avant toutes les autres."
+    },
+    {
+     "do": "wait",
+     "ms": 3200
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,761 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "replication-sharding-cap",
+ "title": "Réplication, partitionnement, CAP",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "requête"
+  },
+  {
+   "kind": "res",
+   "label": "réponse"
+  }
+ ],
+ "entities": [
+  {
+   "id": "users",
+   "kind": "actor",
+   "at": [
+    6.5,
+    6.5
+   ],
+   "label": "les visiteurs",
+   "detail": "Les visiteurs lisent beaucoup d'annonces, et en publient peu."
+  },
+  {
+   "id": "app",
+   "kind": "node",
+   "at": [
+    2.5,
+    2.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "application",
+   "detail": "L'**application** du site, en plusieurs copies sans état (une seule est dessinée)."
+  },
+  {
+   "id": "pri",
+   "kind": "store",
+   "at": [
+    -2.5,
+    -2.5
+   ],
+   "tone": "b",
+   "title": "base principale",
+   "detail": "La **principale** reçoit toutes les écritures."
+  },
+  {
+   "id": "r1",
+   "kind": "store",
+   "at": [
+    -6.0,
+    3.0
+   ],
+   "tone": "n",
+   "title": "réplique",
+   "detail": "Sur le schéma, deux **répliques** : des copies de la principale, qui servent les lectures."
+  },
+  {
+   "id": "r2",
+   "kind": "store",
+   "at": [
+    3.0,
+    -6.0
+   ],
+   "tone": "n"
+  },
+  {
+   "id": "s1",
+   "kind": "store",
+   "at": [
+    -5.25,
+    1.25
+   ],
+   "tone": "b",
+   "title": "partition « Nord »",
+   "detail": "Une **partition** (*shard*) : une base qui ne garde qu'une **part** des annonces."
+  },
+  {
+   "id": "s2",
+   "kind": "store",
+   "at": [
+    1.25,
+    -5.25
+   ],
+   "tone": "b",
+   "title": "partition « Sud »"
+  },
+  {
+   "id": "u-p",
+   "kind": "actor",
+   "at": [
+    1.5,
+    9.5
+   ],
+   "label": "client à Paris"
+  },
+  {
+   "id": "u-l",
+   "kind": "actor",
+   "at": [
+    9.5,
+    1.5
+   ],
+   "label": "client à Lyon"
+  },
+  {
+   "id": "n-p",
+   "kind": "store",
+   "at": [
+    -4.5,
+    3.5
+   ],
+   "tone": "b",
+   "title": "nœud de Paris",
+   "detail": "Deux **nœuds** : deux machines qui gardent chacune une copie des mêmes données, et se recopient."
+  },
+  {
+   "id": "n-l",
+   "kind": "store",
+   "at": [
+    3.5,
+    -4.5
+   ],
+   "tone": "b",
+   "title": "nœud de Lyon"
+  }
+ ],
+ "steps": [
+  {
+   "id": "replication",
+   "label": "Réplication",
+   "title": "La réplication : des copies pour lire",
+   "body": [
+    "Cent lectures pour une écriture. La base principale sature."
+   ],
+   "show": [
+    "users",
+    "app",
+    "pri"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "pri"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "app"
+     ],
+     "spread": true,
+     "gap": 320
+    }
+   ],
+   "hud": [
+    {
+     "label": "lectures",
+     "value": "5 000/s"
+    },
+    {
+     "label": "charge base",
+     "value": "95 %",
+     "tone": "r"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "show": [
+      "r1",
+      "r2"
+     ],
+     "link": [
+      {
+       "from": "pri",
+       "to": "r1",
+       "dashed": true
+      },
+      {
+       "from": "pri",
+       "to": "r2",
+       "dashed": true
+      },
+      {
+       "from": "app",
+       "to": "r1"
+      },
+      {
+       "from": "app",
+       "to": "r2"
+      }
+     ],
+     "say": "Deux **répliques** rejoignent la principale. Chaque écriture leur est **recopiée**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "pri"
+     ],
+     "label": "publier l'annonce",
+     "explain": [
+      "Les **écritures** vont toujours à la principale."
+     ]
+    },
+    {
+     "do": "send",
+     "path": [
+      "pri",
+      "r1"
+     ],
+     "label": "copie"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r1",
+       "label": "lectures"
+      },
+      {
+       "id": "r2",
+       "label": "lectures"
+      },
+      {
+       "id": "pri",
+       "label": "écritures"
+      }
+     ],
+     "say": "Les **écritures** vont à la principale ; les **lectures** se répartissent sur les répliques."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "r2"
+     ],
+     "label": "lire",
+     "reply": "annonce"
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "charge base",
+       "value": "35 %",
+       "tone": "g"
+      }
+     ],
+     "say": "Trois machines se partagent les lectures : la charge de chacune **baisse**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "retard",
+   "label": "Le retard",
+   "title": "Le retard de réplication : l'annonce introuvable",
+   "body": [
+    "La recopie prend un peu de temps. Parfois, ça se voit."
+   ],
+   "show": [
+    "users",
+    "app",
+    "pri",
+    "r1",
+    "r2"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "pri"
+    },
+    {
+     "from": "app",
+     "to": "r1"
+    },
+    {
+     "from": "app",
+     "to": "r2"
+    },
+    {
+     "from": "pri",
+     "to": "r1",
+     "dashed": true
+    },
+    {
+     "from": "pri",
+     "to": "r2",
+     "dashed": true
+    }
+   ],
+   "hud": [
+    {
+     "label": "retard",
+     "value": "0,5 s"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "app",
+      "pri"
+     ],
+     "label": "publier « vélo »",
+     "reply": "publiée"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "pri",
+       "label": "vélo : oui",
+       "tone": "g"
+      }
+     ],
+     "say": "Une visiteuse publie une annonce de vélo. La principale l'enregistre."
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "app",
+      "r1"
+     ],
+     "label": "mes annonces ?",
+     "reply": "aucune"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r1",
+       "label": "vélo : pas encore",
+       "tone": "y"
+      }
+     ],
+     "say": "Elle recharge la page. La lecture tombe sur une réplique **pas encore à jour** : « aucune annonce »."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r1",
+       "label": "vélo : oui",
+       "tone": "n"
+      }
+     ],
+     "say": "Une demi-seconde plus tard, la copie arrive : la réplique finit par dire la même chose. C'est la **cohérence à terme**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app",
+       "label": "relit sur la principale"
+      }
+     ],
+     "say": "Parade courante : juste après une écriture, **relire ses propres données** sur la principale."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "pri"
+     ],
+     "label": "mes annonces ?",
+     "reply": "vélo"
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "partitionnement",
+   "label": "Partitionnement",
+   "title": "Le partitionnement : couper les données en parts",
+   "body": [
+    "Trop d'annonces et trop d'écritures pour une seule principale."
+   ],
+   "show": [
+    "users",
+    "app",
+    "pri"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "pri"
+    }
+   ],
+   "hud": [
+    {
+     "label": "annonces",
+     "value": "80 millions"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "pri",
+       "label": "pleine",
+       "tone": "r"
+      }
+     ],
+     "say": "Les répliques aident à lire, pas à **écrire** : toutes les écritures passent encore par une seule machine."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "hide": [
+      "pri"
+     ],
+     "show": [
+      "s1",
+      "s2"
+     ],
+     "link": [
+      {
+       "from": "app",
+       "to": "s1"
+      },
+      {
+       "from": "app",
+       "to": "s2"
+      }
+     ],
+     "say": "On coupe les annonces en **partitions**, selon une **clé** : ici, la région.",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "s1"
+     ],
+     "label": "annonce à Lille"
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "s2"
+     ],
+     "label": "annonce à Nice"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s1",
+       "label": "40 millions"
+      },
+      {
+       "id": "s2",
+       "label": "40 millions"
+      }
+     ],
+     "say": "Chaque partition garde **sa part** et reçoit **ses** écritures. Chacune a ses propres répliques."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app",
+       "label": "recherche : 2 partitions"
+      }
+     ],
+     "say": "Deux pièges : une recherche « dans toute la France » doit interroger **toutes** les partitions…"
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "s2",
+       "label": "l'été : ×3",
+       "tone": "r"
+      },
+      {
+       "id": "app",
+       "label": null
+      }
+     ],
+     "say": "…et l'été, le Sud reçoit trois fois plus d'annonces : une partition **trop chaude**. Le choix de la clé décide de tout."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "cap",
+   "label": "CAP",
+   "title": "Le réseau se coupe : cohérence ou disponibilité",
+   "body": [
+    "Deux nœuds, à Paris et à Lyon, gardent les mêmes données et se recopient."
+   ],
+   "show": [
+    "u-p",
+    "u-l",
+    "n-p",
+    "n-l"
+   ],
+   "links": [
+    {
+     "from": "u-p",
+     "to": "n-p"
+    },
+    {
+     "from": "u-l",
+     "to": "n-l"
+    },
+    {
+     "from": "n-p",
+     "to": "n-l",
+     "dashed": true
+    }
+   ],
+   "hud": [
+    {
+     "label": "réseau",
+     "value": "relié"
+    },
+    {
+     "label": "Paris",
+     "value": "50 €"
+    },
+    {
+     "label": "Lyon",
+     "value": "50 €"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-p",
+       "label": "vélo : 50 €"
+      },
+      {
+       "id": "n-l",
+       "label": "vélo : 50 €"
+      }
+     ],
+     "say": "Tant que le réseau tient, une écriture à Paris est recopiée à Lyon : les deux disent la **même chose**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "unlink": [
+      {
+       "from": "n-p",
+       "to": "n-l",
+       "dashed": true
+      }
+     ],
+     "hud": [
+      {
+       "label": "réseau",
+       "value": "coupé",
+       "tone": "r"
+      }
+     ],
+     "say": "Le lien entre les deux villes **se coupe**. Chaque nœud marche, mais ils ne se parlent plus : c'est une **partition réseau**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "u-p",
+      "n-p"
+     ],
+     "label": "vélo à 40 €",
+     "reply": "enregistré"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-p",
+       "label": "vélo : 40 €"
+      }
+     ],
+     "hud": [
+      {
+       "label": "Paris",
+       "value": "40 €"
+      }
+     ],
+     "say": "À Paris, le vendeur baisse son prix. Lyon ne peut pas le savoir. Un client lyonnais demande le prix : **deux choix**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "u-l",
+      "n-l"
+     ],
+     "label": "prix ?",
+     "reply": "indisponible"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-l",
+       "label": "refuse : pas sûr",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "Lyon",
+       "value": "pas de réponse",
+       "tone": "y"
+      }
+     ],
+     "say": "**Cohérence** : Lyon refuse de répondre plutôt que de risquer un prix faux. Le service est **indisponible** pour ce client."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "send",
+     "path": [
+      "u-l",
+      "n-l"
+     ],
+     "label": "prix ?",
+     "reply": "50 €"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-l",
+       "label": "répond : 50 €",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "Lyon",
+       "value": "50 €, périmé",
+       "tone": "r"
+      }
+     ],
+     "say": "**Disponibilité** : Lyon répond avec ce qu'il a, 50 €. Le service répond, mais la réponse est **périmée**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "link": [
+      {
+       "from": "n-p",
+       "to": "n-l",
+       "dashed": true
+      }
+     ],
+     "set": [
+      {
+       "id": "n-l",
+       "label": "vélo : 40 €",
+       "tone": "b"
+      }
+     ],
+     "hud": [
+      {
+       "label": "réseau",
+       "value": "relié",
+       "tone": "g"
+      },
+      {
+       "label": "Lyon",
+       "value": "40 €",
+       "tone": "g"
+      }
+     ],
+     "say": "Le réseau revient : les nœuds se **réconcilient**. Pendant la coupure, il fallait choisir l'un **ou** l'autre."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}

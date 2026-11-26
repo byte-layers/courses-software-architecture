@@ -1,0 +1,985 @@
+{
+ "format": "bl-scenes/0.4",
+ "id": "scaling-load-balancing",
+ "title": "Tenir la charge",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "requête"
+  },
+  {
+   "tone": "b",
+   "label": "application"
+  },
+  {
+   "tone": "v",
+   "label": "répartiteur"
+  }
+ ],
+ "entities": [
+  {
+   "id": "users",
+   "kind": "actor",
+   "at": [
+    6.5,
+    6.5
+   ],
+   "label": "les spectateurs",
+   "detail": "Les spectateurs envoient leurs requêtes à **une seule adresse**, celle du site. Ils ne savent pas quelle machine leur répond."
+  },
+  {
+   "id": "solo",
+   "kind": "node",
+   "at": [
+    1.5,
+    1.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "serveur d'application",
+   "detail": "Une seule machine fait tout tourner. Sa **capacité** : le nombre de requêtes par seconde qu'elle sert sans ralentir."
+  },
+  {
+   "id": "big",
+   "kind": "node",
+   "at": [
+    1.5,
+    1.5
+   ],
+   "size": [
+    2.8,
+    2.8,
+    1.6
+   ],
+   "tone": "b",
+   "title": "serveur d'application",
+   "sub": "4 fois plus puissant",
+   "detail": "La même application sur une machine plus puissante : plus de processeurs, plus de mémoire. C'est la **mise à l'échelle verticale**."
+  },
+  {
+   "id": "lb",
+   "kind": "node",
+   "at": [
+    2.8,
+    2.8
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "répartiteur",
+   "sub": "à tour de rôle",
+   "detail": "Le **répartiteur de charge** (*load balancer*) reçoit toutes les requêtes et les distribue aux copies. Il vérifie aussi, toutes les quelques secondes, que chaque copie répond : ce sont les **contrôles de santé**."
+  },
+  {
+   "id": "static",
+   "kind": "node",
+   "at": [
+    -5.5,
+    3.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "n",
+   "title": "fichiers fixes",
+   "sub": "images, CSS, JS",
+   "detail": "Un serveur qui ne fait que renvoyer des fichiers qui ne changent pas : affiches, feuilles de style, scripts."
+  },
+  {
+   "id": "sessions",
+   "kind": "store",
+   "at": [
+    -4.25,
+    -4.25
+   ],
+   "tone": "y",
+   "title": "magasin de sessions",
+   "detail": "Un **magasin de sessions** partagé (Redis, Memcached ou la base de données) : toutes les copies y lisent qui est connecté et ce qu'il y a dans son panier."
+  },
+  {
+   "id": "web1",
+   "kind": "node",
+   "at": [
+    -3.25,
+    1.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "serveur d'application",
+   "detail": "Un **serveur d'application** fait tourner la billetterie. Sur le schéma, plusieurs copies identiques : elles forment **un seul tiers**, puisqu'on compte les niveaux de machines, pas les exemplaires."
+  },
+  {
+   "id": "web2",
+   "kind": "node",
+   "at": [
+    -1.0,
+    -1.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "web3",
+   "kind": "node",
+   "at": [
+    1.25,
+    -3.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "web4",
+   "kind": "node",
+   "at": [
+    -3.25,
+    1.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "web5",
+   "kind": "node",
+   "at": [
+    -1.0,
+    -1.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  }
+ ],
+ "steps": [
+  {
+   "id": "une-machine",
+   "label": "Une machine",
+   "title": "Une machine, et la vente qui ouvre",
+   "body": [
+    "La vente ouvre à 10 h. Le trafic grimpe, la machine sature."
+   ],
+   "show": [
+    "users",
+    "solo"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "solo"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "solo"
+     ],
+     "spread": true,
+     "gap": 420
+    }
+   ],
+   "hud": [
+    {
+     "label": "trafic",
+     "value": "100 req/s"
+    },
+    {
+     "label": "temps de réponse",
+     "value": "80 ms"
+    },
+    {
+     "label": "échecs",
+     "value": "0 %"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "solo",
+       "label": "charge 50 %"
+      }
+     ],
+     "say": "9 h 59 : cent requêtes par seconde, la machine est **chargée à 50 %**."
+    },
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "solo",
+       "label": "charge 300 %",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "trafic",
+       "value": "600 req/s",
+       "tone": "r"
+      },
+      {
+       "label": "temps de réponse",
+       "value": "2 s",
+       "tone": "r"
+      }
+     ],
+     "say": "10 h : la vente ouvre, le trafic est multiplié par **six**."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "échecs",
+       "value": "66 %",
+       "tone": "r"
+      }
+     ],
+     "say": "Elle ne sert que ce qu'elle peut : le reste attend, puis **échoue**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "vertical",
+   "label": "Vertical",
+   "title": "Mise à l'échelle verticale : une machine plus grosse",
+   "body": [
+    "Première idée : la même application, sur une machine plus puissante."
+   ],
+   "show": [
+    "users",
+    "solo"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "solo"
+    }
+   ],
+   "hud": [
+    {
+     "label": "trafic",
+     "value": "600 req/s"
+    },
+    {
+     "label": "en service",
+     "value": "oui"
+    },
+    {
+     "label": "échecs",
+     "value": "66 %",
+     "tone": "r"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 600
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "solo"
+     ],
+     "label": "réserver",
+     "reply": "erreur"
+    },
+    {
+     "do": "scene",
+     "hide": [
+      "solo"
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "non",
+       "tone": "r"
+      },
+      {
+       "label": "échecs",
+       "value": "100 %",
+       "tone": "r"
+      }
+     ],
+     "say": "Pour changer de machine, on **arrête** l'application : le site est coupé."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "show": [
+      "big"
+     ],
+     "link": [
+      {
+       "from": "users",
+       "to": "big"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "oui",
+       "tone": null
+      }
+     ],
+     "say": "Elle redémarre sur une machine **quatre fois plus puissante**.",
+     "ms": 1000
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "big",
+       "label": "charge 75 %"
+      }
+     ],
+     "hud": [
+      {
+       "label": "échecs",
+       "value": "0 %",
+       "tone": null
+      }
+     ],
+     "say": "Elle tient les 600 requêtes par seconde."
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "big"
+     ],
+     "label": "réserver",
+     "reply": "confirmé"
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "big",
+       "tone": "y"
+      }
+     ],
+     "say": "Mais une machine a un **plafond**, coûte de plus en plus cher, et reste **seule** : si elle tombe, tout tombe."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "horizontal",
+   "label": "Horizontal",
+   "title": "Mise à l'échelle horizontale : des copies et un répartiteur",
+   "body": [
+    "Deuxième idée : plusieurs copies de la même application, et une seule adresse devant."
+   ],
+   "show": [
+    "users",
+    "lb",
+    "web1"
+   ],
+   "links": [
+    {
+     "from": "lb",
+     "to": "web1"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "lb"
+     ],
+     "spread": true,
+     "gap": 300,
+     "fallback": "erreur"
+    }
+   ],
+   "hud": [
+    {
+     "label": "trafic",
+     "value": "600 req/s"
+    },
+    {
+     "label": "en service",
+     "value": "1"
+    },
+    {
+     "label": "échecs",
+     "value": "66 %",
+     "tone": "r"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "web1",
+       "label": "charge 300 %",
+       "tone": "r"
+      }
+     ],
+     "say": "Devant, un **répartiteur** reçoit toutes les requêtes. Pour l'instant, une seule copie derrière."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "show": [
+      "web2",
+      "web3"
+     ],
+     "link": [
+      {
+       "from": "lb",
+       "to": "web2"
+      },
+      {
+       "from": "lb",
+       "to": "web3"
+      }
+     ],
+     "set": [
+      {
+       "id": "web1",
+       "label": "charge 100 %",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "3"
+      },
+      {
+       "label": "échecs",
+       "value": "0 %",
+       "tone": null
+      }
+     ],
+     "say": "On démarre **deux copies** de plus, identiques. Le répartiteur les ajoute.",
+     "ms": 1000
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "web1",
+       "label": null,
+       "tone": null
+      }
+     ],
+     "say": "Chaque copie reçoit **un tiers** du trafic, à tour de rôle."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "lb",
+       "tone": "y"
+      }
+     ],
+     "say": "Le jour où le trafic double encore, on ajoute des copies : **sans arrêter** le site."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "reverse-proxy",
+   "label": "Reverse proxy",
+   "title": "Répartiteur et reverse proxy",
+   "body": [
+    "La même machine de devant peut faire plus que répartir."
+   ],
+   "show": [
+    "users",
+    "lb",
+    "web1",
+    "web2",
+    "web3"
+   ],
+   "links": [
+    {
+     "from": "lb",
+     "to": "web1"
+    },
+    {
+     "from": "lb",
+     "to": "web2"
+    },
+    {
+     "from": "lb",
+     "to": "web3"
+    }
+   ],
+   "hud": [
+    {
+     "label": "adresse publique",
+     "value": "1"
+    },
+    {
+     "label": "machines cachées",
+     "value": "3"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "lb",
+       "title": "reverse proxy",
+       "sub": "et répartiteur"
+      }
+     ],
+     "say": "Un **reverse proxy** reçoit les requêtes **à la place** des serveurs : ils restent cachés derrière lui."
+    },
+    {
+     "do": "wait",
+     "ms": 800
+    },
+    {
+     "do": "scene",
+     "show": [
+      "static"
+     ],
+     "link": [
+      {
+       "from": "lb",
+       "to": "static"
+      }
+     ],
+     "hud": [
+      {
+       "label": "machines cachées",
+       "value": "4"
+      }
+     ],
+     "say": "Il peut **aiguiller** selon l'adresse : les affiches vont au serveur de fichiers fixes…"
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "lb",
+      "static"
+     ],
+     "label": "/affiche.jpg",
+     "reply": "image"
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "lb",
+      "web2"
+     ],
+     "label": "/reserver",
+     "reply": "confirmé",
+     "explain": [
+      "Le spectateur réserve : la requête arrive au reverse proxy.",
+      "…et les réservations vont à l'une des copies de l'application.",
+      "La réponse revient par le même chemin."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "lb",
+       "label": "HTTPS ici"
+      }
+     ],
+     "say": "Il porte aussi souvent le **chiffrement HTTPS**, pour que les copies n'aient pas à le faire."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "sans-etat",
+   "label": "Sans état",
+   "title": "Des copies sans état",
+   "body": [
+    "Une copie ne doit rien garder pour elle que les autres auraient besoin de savoir."
+   ],
+   "show": [
+    "users",
+    "lb",
+    "web1",
+    "web2",
+    "web3"
+   ],
+   "links": [
+    {
+     "from": "lb",
+     "to": "web1"
+    },
+    {
+     "from": "lb",
+     "to": "web2"
+    },
+    {
+     "from": "lb",
+     "to": "web3"
+    }
+   ],
+   "hud": [
+    {
+     "label": "panier retrouvé",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "lb",
+      "web1"
+     ],
+     "label": "2 billets au panier",
+     "reply": "ajoutés",
+     "explain": [
+      "Le spectateur met deux billets dans son panier.",
+      "La requête tombe sur la première copie, qui garde le panier **dans sa mémoire**.",
+      "Elle répond : c'est ajouté."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "web1",
+       "label": "panier : 2 billets"
+      }
+     ],
+     "say": "La première copie garde le panier pour elle : c'est son **état**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "lb",
+      "web2"
+     ],
+     "label": "payer",
+     "reply": "panier vide",
+     "explain": [
+      "Le spectateur clique sur « Payer ».",
+      "À tour de rôle, la requête part vers la deuxième copie.",
+      "Elle ne connaît pas ce panier : il est vide."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "web2",
+       "label": "panier vide ?",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "panier retrouvé",
+       "value": "non",
+       "tone": "r"
+      }
+     ],
+     "say": "La deuxième copie n'a jamais vu ce panier : **panier vide**."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "show": [
+      "sessions"
+     ],
+     "link": [
+      {
+       "from": "web1",
+       "to": "sessions"
+      },
+      {
+       "from": "web2",
+       "to": "sessions"
+      },
+      {
+       "from": "web3",
+       "to": "sessions"
+      }
+     ],
+     "set": [
+      {
+       "id": "web1",
+       "label": null
+      },
+      {
+       "id": "web2",
+       "label": null,
+       "tone": null
+      }
+     ],
+     "say": "Le remède : ranger l'état **hors des copies**, dans un magasin de sessions partagé.",
+     "ms": 1000
+    },
+    {
+     "do": "send",
+     "path": [
+      "users",
+      "lb",
+      "web3",
+      "sessions"
+     ],
+     "label": "payer",
+     "reply": "2 billets",
+     "explain": [
+      "Le spectateur paie.",
+      "La requête tombe sur la troisième copie.",
+      "Elle lit le panier dans le magasin partagé.",
+      "Elle le retrouve : deux billets."
+     ]
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "panier retrouvé",
+       "value": "oui",
+       "tone": "g"
+      }
+     ],
+     "say": "N'importe quelle copie sert n'importe qui : les copies sont **sans état**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "playground",
+   "label": "À toi",
+   "title": "À toi : tenir la vente",
+   "body": [
+    "Monte le trafic, coupe une copie, ajoutes-en : la scène suit."
+   ],
+   "hud": [
+    {
+     "label": "trafic",
+     "value": "300 req/s"
+    },
+    {
+     "label": "en service",
+     "value": "3 / 3"
+    },
+    {
+     "label": "échecs",
+     "value": "0 %"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "lb"
+     ],
+     "spread": true,
+     "gap": 300,
+     "fallback": "erreur"
+    }
+   ],
+   "show": [
+    "users",
+    "lb",
+    "web1",
+    "web2",
+    "web3"
+   ],
+   "links": [
+    {
+     "from": "lb",
+     "to": "web1"
+    },
+    {
+     "from": "lb",
+     "to": "web2"
+    },
+    {
+     "from": "lb",
+     "to": "web3"
+    }
+   ],
+   "sim": {
+    "model": "load-balancer",
+    "balancer": "lb",
+    "servers": [
+     {
+      "id": "web1"
+     },
+     {
+      "id": "web2"
+     },
+     {
+      "id": "web3"
+     },
+     {
+      "id": "web4"
+     },
+     {
+      "id": "web5"
+     }
+    ],
+    "traffic": {
+     "value": 300,
+     "min": 50,
+     "max": 1200,
+     "step": 50
+    },
+    "capacity": {
+     "value": 200,
+     "min": 100,
+     "max": 400,
+     "step": 10
+    },
+    "health": 3000,
+    "boot": 3500,
+    "algorithms": [
+     "round-robin"
+    ],
+    "spike": {
+     "factor": 3,
+     "ms": 6000
+    },
+    "controls": [
+     "traffic",
+     "servers",
+     "add",
+     "spike"
+    ],
+    "chart": true,
+    "guide": [
+     {
+      "say": "Monte le trafic jusqu'à 900 requêtes par seconde.",
+      "until": {
+       "traffic": 900
+      },
+      "done": "Trois copies de 200 requêtes par seconde : il en manque, des requêtes échouent."
+     },
+     {
+      "say": "Ajoute des copies jusqu'à ne plus avoir d'échecs.",
+      "until": {
+       "inService": 5,
+       "failedMax": 0
+      },
+      "done": "Cinq copies en service : la charge passe, et aucune n'a été arrêtée pour ça."
+     },
+     {
+      "say": "Fais tomber une copie : décoche web1.",
+      "until": {
+       "down": "web1"
+      },
+      "done": "Tant que les contrôles de santé ne l'ont pas retirée, ses requêtes échouent."
+     },
+     {
+      "say": "Attends que le répartiteur la retire.",
+      "until": {
+       "retired": "web1"
+      },
+      "done": "Retirée : les autres prennent sa part. Avec une seule grosse machine, le site serait coupé."
+     }
+    ]
+   }
+  }
+ ]
+}

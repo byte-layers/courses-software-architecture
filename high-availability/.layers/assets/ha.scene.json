@@ -1,0 +1,927 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "high-availability",
+ "title": "Haute disponibilité",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "requête"
+  },
+  {
+   "kind": "res",
+   "label": "réponse"
+  }
+ ],
+ "entities": [
+  {
+   "id": "users",
+   "kind": "actor",
+   "at": [
+    7.0,
+    7.0
+   ],
+   "label": "les clients",
+   "detail": "Les clients passent commande à toute heure."
+  },
+  {
+   "id": "lb",
+   "kind": "node",
+   "at": [
+    3.25,
+    3.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "répartiteur",
+   "detail": "Le **répartiteur** distribue les requêtes aux copies de l'application."
+  },
+  {
+   "id": "lb2",
+   "kind": "node",
+   "at": [
+    6.5,
+    0.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "répartiteur de secours",
+   "detail": "Un second répartiteur, prêt à reprendre l'**adresse** du premier s'il tombe."
+  },
+  {
+   "id": "db",
+   "kind": "store",
+   "at": [
+    -5.75,
+    -2.25
+   ],
+   "tone": "b",
+   "title": "base principale",
+   "detail": "La **base principale** reçoit toutes les écritures : commandes, stocks, paiements."
+  },
+  {
+   "id": "db2",
+   "kind": "store",
+   "at": [
+    -1.75,
+    -6.25
+   ],
+   "tone": "b",
+   "title": "réplique",
+   "detail": "Une **réplique** : une copie de la base, tenue à jour en continu par la principale."
+  },
+  {
+   "id": "app0",
+   "kind": "node",
+   "at": [
+    -2.75,
+    2.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "application",
+   "detail": "Sur le schéma, trois **copies** de l'application, sans état."
+  },
+  {
+   "id": "app1",
+   "kind": "node",
+   "at": [
+    -0.25,
+    -0.25
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "app2",
+   "kind": "node",
+   "at": [
+    2.25,
+    -2.75
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "zone-a",
+   "kind": "zone",
+   "at": [
+    -3.6,
+    1.6
+   ],
+   "size": [
+    5.6,
+    5.6
+   ],
+   "tone": "n",
+   "label": "centre A"
+  },
+  {
+   "id": "zone-b",
+   "kind": "zone",
+   "at": [
+    1.6,
+    -3.6
+   ],
+   "size": [
+    5.6,
+    5.6
+   ],
+   "tone": "n",
+   "label": "centre B"
+  },
+  {
+   "id": "za-app",
+   "kind": "node",
+   "at": [
+    -2.5,
+    2.7
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "application"
+  },
+  {
+   "id": "zb-app",
+   "kind": "node",
+   "at": [
+    2.7,
+    -2.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "za-db",
+   "kind": "store",
+   "at": [
+    -4.8,
+    0.40000000000000013
+   ],
+   "tone": "b",
+   "title": "base"
+  },
+  {
+   "id": "zb-db",
+   "kind": "store",
+   "at": [
+    0.40000000000000013,
+    -4.8
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "z-lb",
+   "kind": "node",
+   "at": [
+    4.2,
+    4.2
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "répartiteur",
+   "sub": "géré, dans les deux centres"
+  },
+  {
+   "id": "z-users",
+   "kind": "actor",
+   "at": [
+    7.6,
+    7.6
+   ],
+   "label": "les clients"
+  }
+ ],
+ "steps": [
+  {
+   "id": "spof",
+   "label": "SPOF",
+   "title": "Trouver les points uniques de défaillance",
+   "body": [
+    "Trois copies de l'application. Le site est-il à l'abri d'une panne ?"
+   ],
+   "show": [
+    "users",
+    "lb",
+    "db",
+    "app0",
+    "app1",
+    "app2"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "lb"
+    },
+    {
+     "from": "lb",
+     "to": "app0"
+    },
+    {
+     "from": "lb",
+     "to": "app1"
+    },
+    {
+     "from": "lb",
+     "to": "app2"
+    },
+    {
+     "from": "app0",
+     "to": "db"
+    },
+    {
+     "from": "app1",
+     "to": "db"
+    },
+    {
+     "from": "app2",
+     "to": "db"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "lb"
+     ],
+     "spread": true,
+     "gap": 320,
+     "fallback": "erreur"
+    }
+   ],
+   "hud": [
+    {
+     "label": "en service",
+     "value": "oui"
+    },
+    {
+     "label": "échecs",
+     "value": "0 %"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app1",
+       "label": "en panne",
+       "tone": "r"
+      }
+     ],
+     "unlink": [
+      {
+       "from": "lb",
+       "to": "app1"
+      },
+      {
+       "from": "app1",
+       "to": "db"
+      }
+     ],
+     "say": "Une copie de l'application tombe : les deux autres **prennent le relais**. Rien ne se voit."
+    },
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app1",
+       "label": null,
+       "tone": "b"
+      },
+      {
+       "id": "lb",
+       "tone": "y",
+       "label": "un seul"
+      },
+      {
+       "id": "db",
+       "tone": "y",
+       "label": "une seule"
+      }
+     ],
+     "link": [
+      {
+       "from": "lb",
+       "to": "app1"
+      },
+      {
+       "from": "app1",
+       "to": "db"
+      }
+     ],
+     "say": "Mais il n'y a qu'**un** répartiteur, et qu'**une** base."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "tone": "r",
+       "label": "en panne"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "non",
+       "tone": "r"
+      },
+      {
+       "label": "échecs",
+       "value": "100 %",
+       "tone": "r"
+      }
+     ],
+     "say": "La base tombe : les trois copies n'ont plus de données, **tout le site** est coupé."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "tone": "y",
+       "label": "SPOF"
+      },
+      {
+       "id": "lb",
+       "label": "SPOF"
+      }
+     ],
+     "say": "Un élément dont la panne arrête tout s'appelle un **point unique de défaillance** (*SPOF*)."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "redondance",
+   "label": "Redondance",
+   "title": "La redondance : un second exemplaire de chaque élément",
+   "body": [
+    "Pour chaque SPOF, un second exemplaire prêt à servir."
+   ],
+   "show": [
+    "users",
+    "lb",
+    "db",
+    "app0",
+    "app1",
+    "app2"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "lb"
+    },
+    {
+     "from": "lb",
+     "to": "app0"
+    },
+    {
+     "from": "lb",
+     "to": "app1"
+    },
+    {
+     "from": "lb",
+     "to": "app2"
+    },
+    {
+     "from": "app0",
+     "to": "db"
+    },
+    {
+     "from": "app1",
+     "to": "db"
+    },
+    {
+     "from": "app2",
+     "to": "db"
+    }
+   ],
+   "hud": [
+    {
+     "label": "SPOF",
+     "value": 2,
+     "tone": "y"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      {
+       "id": "db2",
+       "dim": true
+      }
+     ],
+     "link": [
+      {
+       "from": "db",
+       "to": "db2",
+       "dashed": true
+      }
+     ],
+     "say": "La base reçoit une **réplique** : une copie tenue à jour en continu."
+    },
+    {
+     "do": "send",
+     "path": [
+      "db",
+      "db2"
+     ],
+     "label": "commande 512"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db2",
+       "label": "à jour"
+      }
+     ],
+     "hud": [
+      {
+       "label": "SPOF",
+       "value": 1,
+       "tone": "y"
+      }
+     ],
+     "say": "Chaque écriture de la principale est **recopiée** sur la réplique : c'est la **réplication**."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "show": [
+      {
+       "id": "lb2",
+       "dim": true
+      }
+     ],
+     "link": [
+      {
+       "from": "lb",
+       "to": "lb2",
+       "dashed": true
+      }
+     ],
+     "hud": [
+      {
+       "label": "SPOF",
+       "value": 0,
+       "tone": "g"
+      }
+     ],
+     "say": "Le répartiteur a un **jumeau**, prêt à reprendre son adresse s'il tombe."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "tone": "b"
+      },
+      {
+       "id": "lb",
+       "tone": "v"
+      }
+     ],
+     "say": "Plus aucun élément n'est seul. C'est la **redondance** : elle coûte deux fois plus de machines."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "bascule",
+   "label": "Bascule",
+   "title": "La bascule : la réplique prend le relais",
+   "body": [
+    "La base principale tombe en pleine soirée."
+   ],
+   "show": [
+    "users",
+    "lb",
+    "db",
+    "db2",
+    "app0",
+    "app1",
+    "app2"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "lb"
+    },
+    {
+     "from": "lb",
+     "to": "app0"
+    },
+    {
+     "from": "lb",
+     "to": "app1"
+    },
+    {
+     "from": "lb",
+     "to": "app2"
+    },
+    {
+     "from": "app0",
+     "to": "db"
+    },
+    {
+     "from": "app1",
+     "to": "db"
+    },
+    {
+     "from": "app2",
+     "to": "db"
+    },
+    {
+     "from": "db",
+     "to": "db2",
+     "dashed": true
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "lb"
+     ],
+     "spread": true,
+     "gap": 320,
+     "fallback": "erreur"
+    }
+   ],
+   "hud": [
+    {
+     "label": "en service",
+     "value": "oui"
+    },
+    {
+     "label": "coupure",
+     "value": "0 s"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "tone": "r",
+       "label": "en panne"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "non",
+       "tone": "r"
+      }
+     ],
+     "say": "La base principale tombe. Les écritures **échouent**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db2",
+       "label": "principale ? pas de réponse"
+      }
+     ],
+     "hud": [
+      {
+       "label": "coupure",
+       "value": "10 s",
+       "tone": "r"
+      }
+     ],
+     "say": "Des **contrôles de santé** constatent qu'elle ne répond plus, plusieurs fois de suite."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db2",
+       "tone": "g",
+       "label": "nouvelle principale",
+       "title": "base principale"
+      },
+      {
+       "id": "db",
+       "dim": true
+      }
+     ],
+     "unlink": [
+      {
+       "from": "app0",
+       "to": "db"
+      },
+      {
+       "from": "app1",
+       "to": "db"
+      },
+      {
+       "from": "app2",
+       "to": "db"
+      },
+      {
+       "from": "db",
+       "to": "db2",
+       "dashed": true
+      }
+     ],
+     "link": [
+      {
+       "from": "app0",
+       "to": "db2"
+      },
+      {
+       "from": "app1",
+       "to": "db2"
+      },
+      {
+       "from": "app2",
+       "to": "db2"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "oui",
+       "tone": "g"
+      },
+      {
+       "label": "coupure",
+       "value": "20 s",
+       "tone": "y"
+      }
+     ],
+     "say": "La réplique est **promue** : elle devient la base principale, et les copies s'y connectent."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db2",
+       "label": "il manque 2 commandes ?"
+      }
+     ],
+     "say": "Le site revient après **une vingtaine de secondes**. Si la recopie avait du retard, les toutes dernières commandes peuvent manquer."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "zones",
+   "label": "Deux centres",
+   "title": "Deux centres de données : survivre à une panne de site",
+   "body": [
+    "Un orage coupe le courant de tout un centre de données."
+   ],
+   "show": [
+    "z-users",
+    "z-lb",
+    "zone-a",
+    "zone-b",
+    "za-app",
+    "zb-app",
+    "za-db",
+    "zb-db"
+   ],
+   "links": [
+    {
+     "from": "z-users",
+     "to": "z-lb"
+    },
+    {
+     "from": "z-lb",
+     "to": "za-app"
+    },
+    {
+     "from": "z-lb",
+     "to": "zb-app"
+    },
+    {
+     "from": "za-app",
+     "to": "za-db"
+    },
+    {
+     "from": "zb-app",
+     "to": "zb-db"
+    },
+    {
+     "from": "za-db",
+     "to": "zb-db",
+     "dashed": true
+    }
+   ],
+   "hud": [
+    {
+     "label": "en service",
+     "value": "oui"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "zone-a",
+       "tone": "y"
+      }
+     ],
+     "say": "Tout est en double, mais **au même endroit** : une coupure de courant emporte les deux exemplaires."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "zone-a",
+       "tone": "n"
+      },
+      {
+       "id": "za-db",
+       "label": "principale"
+      },
+      {
+       "id": "zb-db",
+       "label": "réplique"
+      }
+     ],
+     "say": "On répartit donc les exemplaires dans **deux centres de données**, éloignés l'un de l'autre."
+    },
+    {
+     "do": "send",
+     "path": [
+      "z-users",
+      "z-lb",
+      "za-app"
+     ],
+     "label": "commande"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "zone-a",
+       "tone": "r"
+      },
+      {
+       "id": "za-app",
+       "tone": "r",
+       "label": "hors service"
+      },
+      {
+       "id": "za-db",
+       "tone": "r",
+       "label": "hors service"
+      }
+     ],
+     "unlink": [
+      {
+       "from": "z-lb",
+       "to": "za-app"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "bascule…",
+       "tone": "y"
+      }
+     ],
+     "say": "Le centre A perd le courant : son application et sa base tombent **ensemble**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "zb-db",
+       "tone": "g",
+       "label": "nouvelle principale"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en service",
+       "value": "oui",
+       "tone": "g"
+      }
+     ],
+     "say": "Le centre B **prend tout** : sa réplique est promue, le répartiteur ne lui envoie plus que lui."
+    },
+    {
+     "do": "send",
+     "path": [
+      "z-users",
+      "z-lb",
+      "zb-app"
+     ],
+     "label": "commande"
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}

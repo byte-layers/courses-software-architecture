@@ -1,0 +1,976 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "hexagonal-architecture",
+ "title": "Couches et hexagonale",
+ "lang": "fr",
+ "kit": "plan",
+ "legend": [
+  {
+   "tone": "g",
+   "label": "domaine"
+  },
+  {
+   "tone": "y",
+   "label": "port"
+  },
+  {
+   "tone": "n",
+   "label": "adaptateur"
+  },
+  {
+   "tone": "v",
+   "label": "couche, cercle"
+  }
+ ],
+ "entities": [
+  {
+   "id": "c-pres",
+   "kind": "node",
+   "at": [
+    0,
+    -6.0
+   ],
+   "tone": "v",
+   "size": [
+    16,
+    2.6,
+    1
+   ],
+   "title": "présentation",
+   "sub": "pages web, appli mobile",
+   "detail": "La couche **présentation** reçoit les demandes et affiche les réponses."
+  },
+  {
+   "id": "c-dom",
+   "kind": "node",
+   "at": [
+    0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    16,
+    2.6,
+    1
+   ],
+   "title": "métier",
+   "sub": "pas deux rendez-vous sur un créneau",
+   "detail": "La couche **métier** porte les règles du cabinet."
+  },
+  {
+   "id": "c-data",
+   "kind": "node",
+   "at": [
+    0,
+    6.0
+   ],
+   "tone": "v",
+   "size": [
+    16,
+    2.6,
+    1
+   ],
+   "title": "accès aux données",
+   "sub": "Postgres, fournisseur de SMS",
+   "detail": "La couche **accès aux données** parle à la base et, ici, au fournisseur de SMS."
+  },
+  {
+   "id": "h-core",
+   "kind": "layer",
+   "at": [
+    0,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    13,
+    11,
+    1
+   ],
+   "title": "domaine",
+   "sub": "les règles, sans technique",
+   "detail": "Au centre, le **domaine** : les règles du cabinet. Il ne connaît ni le web, ni Postgres, ni le fournisseur de SMS."
+  },
+  {
+   "id": "h-rule",
+   "kind": "node",
+   "at": [
+    0,
+    -1.6
+   ],
+   "tone": "g",
+   "size": [
+    11,
+    1.9,
+    1
+   ],
+   "in": "h-core",
+   "title": "pas deux rendez-vous par créneau"
+  },
+  {
+   "id": "h-p1",
+   "kind": "node",
+   "at": [
+    -2.8,
+    2.2
+   ],
+   "tone": "y",
+   "size": [
+    5.2,
+    2.2,
+    1
+   ],
+   "in": "h-core",
+   "title": "port",
+   "sub": "ranger les rendez-vous",
+   "detail": "Un **port** : une interface que le **domaine** définit, avec ses mots à lui (« ranger un rendez-vous »). Il ne dit pas comment."
+  },
+  {
+   "id": "h-p2",
+   "kind": "node",
+   "at": [
+    2.8,
+    2.2
+   ],
+   "tone": "y",
+   "size": [
+    5.2,
+    2.2,
+    1
+   ],
+   "in": "h-core",
+   "title": "port",
+   "sub": "prévenir le client"
+  },
+  {
+   "id": "h-web",
+   "kind": "node",
+   "at": [
+    -14,
+    -4.5
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    2.4,
+    1
+   ],
+   "title": "adaptateur web",
+   "sub": "le contrôleur des pages",
+   "detail": "Un **adaptateur primaire** : il reçoit une demande de l'extérieur et appelle le domaine."
+  },
+  {
+   "id": "h-mob",
+   "kind": "node",
+   "at": [
+    -14,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    2.4,
+    1
+   ],
+   "title": "adaptateur mobile",
+   "sub": "l'API de l'appli"
+  },
+  {
+   "id": "h-test",
+   "kind": "node",
+   "at": [
+    -14,
+    4.5
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    2.4,
+    1
+   ],
+   "title": "les tests",
+   "sub": "appellent le domaine directement"
+  },
+  {
+   "id": "h-pg",
+   "kind": "node",
+   "at": [
+    14,
+    -2.2
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    2.4,
+    1
+   ],
+   "title": "adaptateur Postgres",
+   "sub": "implémente « ranger »",
+   "detail": "Un **adaptateur secondaire** : il **implémente** un port du domaine avec une technique précise."
+  },
+  {
+   "id": "h-sms",
+   "kind": "node",
+   "at": [
+    14,
+    2.8
+   ],
+   "tone": "n",
+   "size": [
+    8,
+    2.4,
+    1
+   ],
+   "title": "adaptateur SMS",
+   "sub": "implémente « prévenir »"
+  },
+  {
+   "id": "o-out",
+   "kind": "layer",
+   "at": [
+    0,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    34,
+    17,
+    1
+   ],
+   "title": "infrastructure et interfaces",
+   "sub": "web, base, SMS, frameworks",
+   "detail": "Le cercle extérieur : tout ce qui est technique et change souvent."
+  },
+  {
+   "id": "o-app",
+   "kind": "layer",
+   "at": [
+    0,
+    1.4
+   ],
+   "tone": "v",
+   "size": [
+    21,
+    11.5,
+    1
+   ],
+   "in": "o-out",
+   "title": "cas d'usage",
+   "sub": "prendre un rendez-vous, l'annuler",
+   "detail": "Le cercle des **cas d'usage** (ou couche application) : il enchaîne les règles pour une action de l'utilisateur."
+  },
+  {
+   "id": "o-dom",
+   "kind": "layer",
+   "at": [
+    0.6,
+    1.5
+   ],
+   "tone": "g",
+   "size": [
+    9.6,
+    6,
+    1
+   ],
+   "in": "o-app",
+   "title": "domaine",
+   "sub": "les règles",
+   "detail": "Au centre, le **domaine**, qui ne dépend de rien."
+  },
+  {
+   "id": "o-x",
+   "kind": "node",
+   "at": [
+    -13.6,
+    2.0
+   ],
+   "tone": "n",
+   "size": [
+    5.2,
+    2.0,
+    1
+   ],
+   "in": "o-out",
+   "title": "contrôleur web"
+  },
+  {
+   "id": "o-u",
+   "kind": "node",
+   "at": [
+    -7.75,
+    1.5
+   ],
+   "tone": "v",
+   "size": [
+    5.0,
+    2.2,
+    1
+   ],
+   "in": "o-app",
+   "title": "prendre un RDV"
+  },
+  {
+   "id": "o-r",
+   "kind": "node",
+   "at": [
+    0,
+    1.0
+   ],
+   "tone": "g",
+   "size": [
+    8.0,
+    2.0,
+    1
+   ],
+   "in": "o-dom",
+   "title": "créneau libre ?"
+  },
+  {
+   "id": "n-web",
+   "kind": "layer",
+   "at": [
+    -11,
+    0
+   ],
+   "tone": "n",
+   "size": [
+    13,
+    12,
+    1
+   ],
+   "title": "adaptateur web",
+   "detail": "MVC vit **dans** l'adaptateur web : l'hexagonale ne le remplace pas, elle dit où il se range."
+  },
+  {
+   "id": "n-v",
+   "kind": "node",
+   "at": [
+    0,
+    -2.4
+   ],
+   "tone": "v",
+   "size": [
+    11,
+    1.9,
+    1
+   ],
+   "in": "n-web",
+   "title": "vue"
+  },
+  {
+   "id": "n-c",
+   "kind": "node",
+   "at": [
+    0,
+    0.4
+   ],
+   "tone": "v",
+   "size": [
+    11,
+    1.9,
+    1
+   ],
+   "in": "n-web",
+   "title": "contrôleur"
+  },
+  {
+   "id": "n-m",
+   "kind": "node",
+   "at": [
+    0,
+    3.2
+   ],
+   "tone": "g",
+   "size": [
+    11,
+    1.9,
+    1
+   ],
+   "in": "n-web",
+   "title": "modèle → le domaine"
+  },
+  {
+   "id": "n-mono",
+   "kind": "layer",
+   "at": [
+    8,
+    0
+   ],
+   "tone": "g",
+   "size": [
+    15,
+    12,
+    1
+   ],
+   "title": "appli de VTC",
+   "sub": "un seul déploiement",
+   "detail": "Une appli de VTC dessinée en hexagone : passagers, chauffeurs, trajets, factures, paiements, notifications au centre, des adaptateurs autour. **Un seul artefact** : c'est un monolithe."
+  },
+  {
+   "id": "n-d0",
+   "kind": "node",
+   "at": [
+    -3.3,
+    -2.6
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "passagers"
+  },
+  {
+   "id": "n-d1",
+   "kind": "node",
+   "at": [
+    3.3,
+    -2.6
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "chauffeurs"
+  },
+  {
+   "id": "n-d2",
+   "kind": "node",
+   "at": [
+    -3.3,
+    0.10000000000000009
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "trajets"
+  },
+  {
+   "id": "n-d3",
+   "kind": "node",
+   "at": [
+    3.3,
+    0.10000000000000009
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "factures"
+  },
+  {
+   "id": "n-d4",
+   "kind": "node",
+   "at": [
+    -3.3,
+    2.8000000000000003
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "paiements"
+  },
+  {
+   "id": "n-d5",
+   "kind": "node",
+   "at": [
+    3.3,
+    2.8000000000000003
+   ],
+   "tone": "g",
+   "size": [
+    6.0,
+    1.9,
+    1
+   ],
+   "in": "n-mono",
+   "title": "notifications"
+  }
+ ],
+ "steps": [
+  {
+   "id": "couches",
+   "label": "Couches",
+   "title": "Une architecture en couches bien tenue",
+   "body": [
+    "Trois couches, et une règle : chacune ne connaît que celle du dessous."
+   ],
+   "show": [
+    "c-pres",
+    "c-dom",
+    "c-data"
+   ],
+   "links": [
+    {
+     "from": "c-pres",
+     "to": "c-dom"
+    },
+    {
+     "from": "c-dom",
+     "to": "c-data"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-pres",
+      "c-dom",
+      "c-data"
+     ],
+     "label": "rendez-vous mardi 10 h",
+     "reply": "confirmé",
+     "explain": [
+      "La présentation transmet la demande au métier.",
+      "Le métier vérifie le créneau, puis demande d'enregistrer.",
+      "La réponse remonte."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-dom",
+       "label": "connaît la couche du dessous"
+      }
+     ],
+     "say": "Les flèches disent **qui connaît qui** : toujours vers le bas."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-dom",
+       "label": null,
+       "tone": "g"
+      }
+     ],
+     "say": "Bien tenue, cette architecture est **correcte**, et suffit à beaucoup d'applications."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "probleme",
+   "label": "Le problème",
+   "title": "Le problème : les règles dépendent de la base",
+   "body": [
+    "Le même schéma. Regardons la flèche du milieu."
+   ],
+   "show": [
+    "c-pres",
+    "c-dom",
+    "c-data"
+   ],
+   "links": [
+    {
+     "from": "c-pres",
+     "to": "c-dom"
+    },
+    {
+     "from": "c-dom",
+     "to": "c-data"
+    }
+   ],
+   "hud": [
+    {
+     "label": "tester la règle",
+     "value": "—"
+    },
+    {
+     "label": "changer de SMS",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-data",
+       "tone": "r"
+      }
+     ],
+     "say": "Le métier **connaît** l'accès aux données : il appelle du code écrit pour Postgres et pour un fournisseur de SMS précis."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "tester la règle",
+       "value": "base requise",
+       "tone": "r"
+      }
+     ],
+     "say": "Pour tester la règle des créneaux, il faut donc une **vraie base**."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "changer de SMS",
+       "value": "touche au métier",
+       "tone": "r"
+      }
+     ],
+     "say": "Et changer de fournisseur de SMS oblige à **retoucher le métier**."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c-dom",
+       "tone": "y"
+      }
+     ],
+     "say": "Les règles, le cœur de l'application, dépendent des détails techniques : c'est **ce sens-là** qu'on va inverser."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "ports-adaptateurs",
+   "label": "Ports et adaptateurs",
+   "title": "Inverser la dépendance : ports et adaptateurs",
+   "body": [
+    "Le domaine au centre, la technique autour, et toutes les flèches vers le centre."
+   ],
+   "show": [
+    "h-core",
+    "h-rule"
+   ],
+   "links": [],
+   "hud": [
+    {
+     "label": "tester la règle",
+     "value": "—"
+    },
+    {
+     "label": "changer de SMS",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "h-p1",
+      "h-p2"
+     ],
+     "say": "Le domaine définit ce dont il a besoin, avec ses mots : ce sont ses **ports**."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "show": [
+      "h-pg",
+      "h-sms"
+     ],
+     "link": [
+      {
+       "from": "h-pg",
+       "to": "h-p1"
+      },
+      {
+       "from": "h-sms",
+       "to": "h-p2"
+      }
+     ],
+     "say": "À droite, des **adaptateurs** implémentent ces ports : l'un pour Postgres, l'autre pour le SMS."
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "h-pg",
+       "tone": "y"
+      }
+     ],
+     "say": "La flèche s'est **inversée** : c'est l'adaptateur qui connaît le domaine, plus l'inverse."
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "show": [
+      "h-web",
+      "h-mob",
+      "h-test"
+     ],
+     "link": [
+      {
+       "from": "h-web",
+       "to": "h-core"
+      },
+      {
+       "from": "h-mob",
+       "to": "h-core"
+      },
+      {
+       "from": "h-test",
+       "to": "h-core"
+      }
+     ],
+     "set": [
+      {
+       "id": "h-pg",
+       "tone": "n"
+      }
+     ],
+     "say": "À gauche, d'autres adaptateurs appellent le domaine : le web, le mobile… et les **tests**."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "tester la règle",
+       "value": "sans base",
+       "tone": "g"
+      },
+      {
+       "label": "changer de SMS",
+       "value": "un adaptateur",
+       "tone": "g"
+      }
+     ],
+     "say": "La règle se teste **sans base**, et changer de fournisseur de SMS, c'est **écrire un adaptateur**."
+    },
+    {
+     "do": "wait",
+     "ms": 3200
+    }
+   ]
+  },
+  {
+   "id": "onion-clean",
+   "label": "Onion et clean",
+   "title": "Onion et clean : la même règle, d'autres dessins",
+   "body": [
+    "Des cercles plutôt qu'un hexagone, et la même règle de dépendance."
+   ],
+   "show": [
+    "o-out"
+   ],
+   "links": [],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "show": [
+      "o-x"
+     ],
+     "set": [
+      {
+       "id": "o-out",
+       "tone": "y"
+      }
+     ],
+     "say": "Le cercle extérieur : le web, la base, les frameworks, tout ce qui change souvent."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "show": [
+      "o-app",
+      "o-u"
+     ],
+     "link": [
+      {
+       "from": "o-x",
+       "to": "o-u"
+      }
+     ],
+     "set": [
+      {
+       "id": "o-out",
+       "tone": "n"
+      }
+     ],
+     "say": "Dedans, les **cas d'usage** : prendre un rendez-vous, l'annuler."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "show": [
+      "o-dom",
+      "o-r"
+     ],
+     "link": [
+      {
+       "from": "o-u",
+       "to": "o-r"
+      }
+     ],
+     "say": "Au centre, le **domaine**."
+    },
+    {
+     "do": "wait",
+     "ms": 1000
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "o-dom",
+       "tone": "y"
+      }
+     ],
+     "say": "La règle, partout : un cercle ne connaît que les cercles **plus au centre**. Onion, clean, hexagonale : même idée."
+    },
+    {
+     "do": "wait",
+     "ms": 3200
+    }
+   ]
+  },
+  {
+   "id": "ce-quelle-nest-pas",
+   "label": "Ce qu'elle n'est pas",
+   "title": "Ce que l'hexagonale n'est pas",
+   "body": [
+    "Deux confusions fréquentes, côte à côte."
+   ],
+   "show": [
+    "n-web",
+    "n-v",
+    "n-c",
+    "n-m"
+   ],
+   "links": [
+    {
+     "from": "n-c",
+     "to": "n-m"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-web",
+       "tone": "y"
+      }
+     ],
+     "say": "MVC n'est pas en concurrence avec l'hexagonale : il vit **dans l'adaptateur web**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "show": [
+      "n-mono",
+      "n-d0",
+      "n-d1",
+      "n-d2",
+      "n-d3",
+      "n-d4",
+      "n-d5"
+     ],
+     "set": [
+      {
+       "id": "n-web",
+       "tone": "n"
+      }
+     ],
+     "say": "À droite, une appli de VTC dessinée en hexagone…"
+    },
+    {
+     "do": "wait",
+     "ms": 1100
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "n-mono",
+       "tone": "y"
+      }
+     ],
+     "say": "…mais livrée d'un seul bloc : c'est un **monolithe**. Hexagonale ne veut pas dire micro-services."
+    },
+    {
+     "do": "wait",
+     "ms": 3200
+    }
+   ]
+  }
+ ]
+}
