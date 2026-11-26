@@ -5,10 +5,21 @@ Les contenus byte_layers sur l'architecture logicielle et le system design, pour
 | Dossier | Contenu | Type |
 |---|---|---|
 | `tiers-layers-mvc/` | Tiers, couches et MVC : trois notions à ne pas mélanger | bit |
-| `scaling-load-balancing/` | Tenir la charge : vertical, horizontal, répartiteur et services sans état | bit, playground |
+| `hexagonal-architecture/` | L'architecture hexagonale : ports, adaptateurs, et la règle de dépendance | bit |
 | `monolith-to-microservices/` | Monolithe, monolithe modulaire, micro-services : ce qui se déploie ensemble | bit |
+| `microservices-costs/` | Le prix des micro-services : réseau, déploiements, observabilité | bit |
+| `api-gateway-bff-microfrontends/` | Passerelle d'API, BFF et micro-frontends | bit |
+| `sync-async-communication/` | Synchrone ou asynchrone : attendre la réponse, ou non | bit, playground |
+| `communication-protocols/` | Les protocoles entre programmes : de TCP à gRPC | bit |
+| `queues-and-event-logs/` | Files de messages et journaux d'événements | bit, playground |
+| `event-driven-cqrs/` | Architecture orientée événements et CQRS | bit |
+| `scaling-load-balancing/` | Tenir la charge : vertical, horizontal, répartiteur et services sans état | bit, playground |
+| `cache-and-cdn/` | Répondre plus vite : cache et CDN | bit |
+| `replication-sharding-cap/` | Réplication, partitionnement et théorème CAP | bit |
+| `high-availability/` | Rester en service : SPOF, redondance, bascule | bit |
+| `architecture-case-studies/` | Six organisations, six architectures | bit |
 
-Chaque contenu a son tag, de la forme `<dossier>/vN`. Les bits avec un playground (étape `sim`) demandent l'extension 0.11.0 ; les autres, 0.8.0.
+Quatre familles, lisibles dans cet ordre : organiser le code (les deux premiers), découper en services (les trois suivants), faire communiquer les programmes (quatre), tenir la charge et rester en service (quatre), puis les cas d'organisations. Chaque contenu a son tag, de la forme `<dossier>/vN`. Les bits avec un playground demandent l'extension 0.11.0 (`scaling-load-balancing`) ou 0.12.0 (`sync-async-communication`, `queues-and-event-logs`) ; les autres, 0.8.0.
 
 ## Régénérer un schéma animé
 
