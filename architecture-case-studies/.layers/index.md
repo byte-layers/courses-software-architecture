@@ -10,7 +10,7 @@ duration: 18
 requires: "0.8.0"
 ---
 
-Il n'existe pas de bonne architecture en général, seulement des architectures adaptées à une situation. Ce bit présente six organisations inventées. Pour chacune : ce qu'elle fait, ce qui pèse vraiment dans sa décision, et l'architecture qu'elle a retenue. Avant de lire leur choix, **décidez vous-même** dans le quiz : les écarts sont ce que vous apprendrez.
+Il n'existe pas de bonne architecture en général, seulement des architectures adaptées à une situation. Ce bit présente six organisations inventées. Pour chacune : ce qu'elle fait, ce qui pèse vraiment dans sa décision, et l'architecture qu'elle a retenue. Pour chacune, **décidez vous-même** dans le quiz : la réponse dévoile leur choix, et les écarts sont ce que vous apprendrez.
 
 **Prérequis** : [Monolithe, monolithe modulaire, micro-services](https://byte-layers.com/fr/bits/monolith-to-microservices) et [Tenir la charge : vertical, horizontal, répartiteur](https://byte-layers.com/fr/bits/scaling-load-balancing).
 
@@ -20,7 +20,7 @@ Il n'existe pas de bonne architecture en général, seulement des architectures 
 
 ## 1 · Factulo : cinq développeurs, un produit qui bouge
 
-**Factulo** vend un logiciel de facturation en ligne à des artisans. Cinq développeurs, un métier qui change chaque mois au gré des demandes des clients, 2 000 utilisateurs, une charge stable. Décide avant de lire leur choix.
+**Factulo** vend un logiciel de facturation en ligne à des artisans. Cinq développeurs, un métier qui change chaque mois au gré des demandes des clients, 2 000 utilisateurs, une charge stable. À toi de décider.
 
 ```quiz
 title: "Factulo"
@@ -34,7 +34,7 @@ questions:
       - "Un monolithe modulaire, une base, deux copies derrière un répartiteur"
       - "Une architecture orientée événements avec un journal d'événements"
     correct: 2
-    explanation: "Une seule équipe, une charge modeste : les micro-services n'apporteraient que leurs coûts (réseau, déploiements, observabilité). Deux copies suffisent pour survivre à une panne."
+    explanation: "Une seule équipe, une charge modeste : les micro-services n'apporteraient que leurs coûts (réseau, déploiements, observabilité). Deux copies suffisent pour survivre à une panne. Leur choix : un monolithe modulaire, en deux copies. Ils ont refusé les micro-services : rien, ni l'organisation ni la charge, ne les justifiait encore."
   - prompt: "Qu'est-ce qui leur permettra de découper plus tard, si l'équipe grandit ?"
     answers:
       - "Mettre tout le code dans un seul fichier"
@@ -43,8 +43,6 @@ questions:
     correct: 3
     explanation: "Des frontières tenues dans le code rendent le découpage possible le jour où il devient utile."
 ```
-
-**Leur choix** : un **monolithe modulaire**, en deux copies. Ils ont refusé les micro-services : rien, ni l'organisation ni la charge, ne les justifiait encore.
 
 ## 2 · L'Écho du soir : un site d'information et ses pics
 
@@ -62,7 +60,7 @@ questions:
       - "Un plus gros serveur de base de données"
       - "Découper le site en micro-services"
     correct: 1
-    explanation: "Un CDN (réseau de serveurs répartis dans le monde) garde des copies des pages et répond sans solliciter l'application. La plupart des lectures n'atteignent jamais le serveur."
+    explanation: "Un CDN (réseau de serveurs répartis dans le monde) garde des copies des pages et répond sans solliciter l'application. La plupart des lectures n'atteignent jamais le serveur. Leur choix : un CDN devant le site, un cache pour les articles, des copies sans état qu'on ajoute les soirs de pic. L'application reste un monolithe : le problème était la lecture, pas l'organisation."
   - prompt: "Pour le reste du trafic, comment ajouter des copies de l'application rapidement ?"
     answers:
       - "Garder la session de chaque lecteur en mémoire sur une seule machine"
@@ -71,8 +69,6 @@ questions:
     correct: 3
     explanation: "Sans état, n'importe quelle copie peut répondre à n'importe qui : on en ajoute autant que nécessaire."
 ```
-
-**Leur choix** : un **CDN** devant le site, un **cache** pour les articles, des copies **sans état** qu'on ajoute les soirs de pic. L'application reste un monolithe : le problème était la lecture, pas l'organisation.
 
 ## 3 · Marchéo : douze équipes sur une place de marché
 
@@ -90,7 +86,7 @@ questions:
       - "Douze équipes qui doivent livrer chacune à son rythme"
       - "La mode"
     correct: 2
-    explanation: "Les micro-services répondent d'abord à un problème d'organisation : chaque équipe possède et déploie son service."
+    explanation: "Les micro-services répondent d'abord à un problème d'organisation : chaque équipe possède et déploie son service. Leur choix : des micro-services par domaine métier, chacun avec sa base, une passerelle d'API, un BFF mobile, et une observabilité soignée (journaux centralisés, traces). Le prix est assumé : une équipe plateforme dédiée à l'outillage."
   - prompt: "Que mettre devant les services pour le site et l'appli ?"
     answers:
       - "Une passerelle d'API, et un BFF pour l'appli mobile"
@@ -99,8 +95,6 @@ questions:
     correct: 1
     explanation: "La passerelle donne une entrée unique et centralise l'authentification ; le BFF assemble des réponses taillées pour le mobile."
 ```
-
-**Leur choix** : des **micro-services par domaine métier**, chacun avec sa base, une **passerelle d'API**, un **BFF** mobile, et une **observabilité** soignée (journaux centralisés, traces). Le prix est assumé : une équipe plateforme dédiée à l'outillage.
 
 ## 4 · Banque Arpège : un compte ne doit jamais être faux
 
@@ -118,7 +112,7 @@ questions:
       - "Refuser des opérations un moment, plutôt que d'afficher un solde faux"
       - "Choisir au hasard"
     correct: 2
-    explanation: "C'est le choix de la cohérence. Quand le réseau se coupe entre deux copies des données, on ne peut pas garder à la fois des réponses toujours justes et un service toujours disponible ; la banque choisit le juste."
+    explanation: "C'est le choix de la cohérence. Quand le réseau se coupe entre deux copies des données, on ne peut pas garder à la fois des réponses toujours justes et un service toujours disponible ; la banque choisit le juste. Leur choix : le cœur des comptes reste un monolithe aux règles riches, en architecture hexagonale pour tester ces règles sans base, avec une base qui garantit la cohérence. Les fonctions autour (notifications, relevés) sont à part et asynchrones."
   - prompt: "Le client clique deux fois sur « Virer 100 € » parce que la page tardait. Que doit garantir le système ?"
     answers:
       - "Que le second clic soit plus rapide"
@@ -127,8 +121,6 @@ questions:
     correct: 3
     explanation: "Une opération idempotente produit le même résultat qu'on l'exécute une fois ou deux. On lui donne un identifiant unique, et le second envoi est reconnu."
 ```
-
-**Leur choix** : le cœur des comptes reste un **monolithe** aux règles riches, en **architecture hexagonale** pour tester ces règles sans base, avec une base qui garantit la **cohérence**. Les fonctions autour (notifications, relevés) sont à part et **asynchrones**.
 
 ## 5 · Roulio : 30 000 camions qui envoient leur position
 
@@ -146,7 +138,7 @@ questions:
       - "Faire attendre chaque camion jusqu'à ce que tous les traitements aient répondu"
       - "Ignorer les positions quand le serveur est occupé"
     correct: 1
-    explanation: "La file sert de tampon : les camions déposent et repartent, les traitements rattrapent leur retard ensuite. C'est une communication asynchrone."
+    explanation: "La file sert de tampon : les camions déposent et repartent, les traitements rattrapent leur retard ensuite. C'est une communication asynchrone. Leur choix : un journal d'événements reçoit les positions ; la carte, la facturation et les alertes le lisent chacune à leur rythme. La facturation peut prendre une heure de retard un matin, sans que les camions s'en aperçoivent."
   - prompt: "La carte, la facturation et les alertes doivent toutes lire chaque position. Quel outil le permet ?"
     answers:
       - "Une file classique, où chaque message n'est lu qu'une fois"
@@ -155,8 +147,6 @@ questions:
     correct: 2
     explanation: "Dans un journal d'événements, les messages restent ; chaque groupe de lecteurs avance avec sa propre position. Une file classique distribue chaque message à un seul lecteur."
 ```
-
-**Leur choix** : un **journal d'événements** reçoit les positions ; la carte, la facturation et les alertes le lisent chacune à leur rythme. La facturation peut prendre une heure de retard un matin, sans que les camions s'en aperçoivent.
 
 ## 6 · Papoti : une messagerie dans le monde entier
 
@@ -174,7 +164,7 @@ questions:
       - "Par courriel"
       - "Par une connexion WebSocket qui reste ouverte, dans les deux sens"
     correct: 3
-    explanation: "Le WebSocket laisse le serveur pousser le message dès qu'il arrive, et l'appli envoyer les siens sur la même connexion."
+    explanation: "Le WebSocket laisse le serveur pousser le message dès qu'il arrive, et l'appli envoyer les siens sur la même connexion. Leur choix : des WebSockets pour les messages, des données répliquées par continent, et une cohérence à terme pour ce qui peut attendre. Le contraire exact de la banque, pour de bonnes raisons."
   - prompt: "Les données sont copiées sur trois continents. Si le réseau coupe entre deux, que préférer pour le compteur de réactions ?"
     answers:
       - "Bloquer toute la messagerie jusqu'au retour du réseau"
@@ -183,8 +173,6 @@ questions:
     correct: 2
     explanation: "C'est le choix de la disponibilité : un compteur un peu en retard ne fait de tort à personne. On parle de cohérence à terme."
 ```
-
-**Leur choix** : des **WebSockets** pour les messages, des données **répliquées** par continent, et une **cohérence à terme** pour ce qui peut attendre. Le contraire exact de la banque, pour de bonnes raisons.
 
 ## Ce qui revient d'un cas à l'autre
 
