@@ -22,7 +22,7 @@ Si vous êtes bloqué, les **indices** se dévoilent un par un, et la **solution
 
 - **Ce qu'il faut savoir** : ce qu'enseignent [Monolithe, monolithe modulaire, micro-services](https://byte-layers.com/fr/bits/monolith-to-microservices), [Le prix des micro-services](https://byte-layers.com/fr/bits/microservices-costs), [Synchrone ou asynchrone](https://byte-layers.com/fr/bits/sync-async-communication), [Les protocoles entre programmes](https://byte-layers.com/fr/bits/communication-protocols) et [Six organisations, six architectures](https://byte-layers.com/fr/bits/architecture-case-studies).
 - **Ce qu'il faut avoir** : rien de plus que cette page. Aucun fichier n'est créé sur votre machine.
-- **Les questions à plusieurs réponses** le disent dans leur énoncé ; il faut cocher toutes les bonnes, et aucune autre.
+- **Les questions à plusieurs réponses** sont signalées sous la question ; il faut cocher toutes les bonnes, et aucune autre.
 
 > Hopla est inventée et simplifiée : une vraie décision pèse aussi le budget, les compétences de l'équipe et l'existant. Les chiffres sont des ordres de grandeur.
 
@@ -57,7 +57,7 @@ title: "Tâche 1 : les services"
 tracksProgress: true
 showNotice: false
 questions:
-  - prompt: "Quels modules sortent du monolithe pour devenir des services ? (plusieurs réponses)"
+  - prompt: "Quels modules sortent du monolithe pour devenir des services ?"
     answers:
       - "passagers"
       - "chauffeurs"
