@@ -1,0 +1,788 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "event-driven-cqrs",
+ "title": "Événements et CQRS",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "appel ou événement"
+  },
+  {
+   "kind": "res",
+   "label": "réponse"
+  }
+ ],
+ "entities": [
+  {
+   "id": "orders",
+   "kind": "node",
+   "at": [
+    5.0,
+    5.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "commandes",
+   "detail": "Le service **commandes** enregistre chaque commande de livre."
+  },
+  {
+   "id": "bus",
+   "kind": "store",
+   "at": [
+    1.0,
+    1.0
+   ],
+   "tone": "y",
+   "title": "journal d'événements",
+   "detail": "Un **journal d'événements** (Kafka, par exemple) garde les événements publiés ; chaque abonné les lit à son rythme."
+  },
+  {
+   "id": "stock",
+   "kind": "node",
+   "at": [
+    -7.0,
+    0.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "stock"
+  },
+  {
+   "id": "fact",
+   "kind": "node",
+   "at": [
+    -3.5,
+    -3.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "facturation"
+  },
+  {
+   "id": "mail",
+   "kind": "node",
+   "at": [
+    0.0,
+    -7.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "e-mails"
+  },
+  {
+   "id": "reco",
+   "kind": "node",
+   "at": [
+    6.5,
+    -3.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "recommandations"
+  },
+  {
+   "id": "client",
+   "kind": "actor",
+   "at": [
+    6.5,
+    6.5
+   ],
+   "label": "le lecteur"
+  },
+  {
+   "id": "w-api",
+   "kind": "node",
+   "at": [
+    -1.0,
+    6.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "côté écriture",
+   "sub": "valide les commandes",
+   "detail": "Le **côté écriture** reçoit les ordres (« passer commande »), vérifie les règles, et enregistre."
+  },
+  {
+   "id": "w-db",
+   "kind": "store",
+   "at": [
+    -6.0,
+    1.0
+   ],
+   "tone": "b",
+   "title": "base d'écriture",
+   "sub": "tables normalisées",
+   "detail": "Une base pensée pour **écrire juste** : chaque information à un seul endroit."
+  },
+  {
+   "id": "r-api",
+   "kind": "node",
+   "at": [
+    6.0,
+    -1.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "g",
+   "title": "côté lecture",
+   "sub": "sert les écrans",
+   "detail": "Le **côté lecture** répond aux questions des écrans (« mes commandes »), sans rien modifier."
+  },
+  {
+   "id": "r-db",
+   "kind": "store",
+   "at": [
+    1.0,
+    -6.0
+   ],
+   "tone": "g",
+   "title": "vue « mes commandes »",
+   "sub": "prête à afficher",
+   "detail": "Une base pensée pour **lire vite** : les données déjà assemblées comme l'écran les affiche."
+  },
+  {
+   "id": "c-bus",
+   "kind": "store",
+   "at": [
+    -2.5,
+    -2.5
+   ],
+   "tone": "y",
+   "title": "événements"
+  }
+ ],
+ "steps": [
+  {
+   "id": "appels-directs",
+   "label": "Appels directs",
+   "title": "Appels directs : commandes doit connaître tout le monde",
+   "body": [
+    "Une commande déclenche trois traitements. Commandes appelle chacun."
+   ],
+   "show": [
+    "orders",
+    "stock",
+    "fact",
+    "mail"
+   ],
+   "links": [
+    {
+     "from": "orders",
+     "to": "stock"
+    },
+    {
+     "from": "orders",
+     "to": "fact"
+    },
+    {
+     "from": "orders",
+     "to": "mail"
+    }
+   ],
+   "hud": [
+    {
+     "label": "appels à écrire",
+     "value": 3
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "orders",
+      "stock"
+     ],
+     "label": "réserve le livre"
+    },
+    {
+     "do": "send",
+     "path": [
+      "orders",
+      "fact"
+     ],
+     "label": "facture"
+    },
+    {
+     "do": "send",
+     "path": [
+      "orders",
+      "mail"
+     ],
+     "label": "confirme"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "orders",
+       "label": "connaît 3 services"
+      }
+     ],
+     "say": "Commandes **appelle** le stock, la facturation et les e-mails, un par un."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "mail",
+       "tone": "r",
+       "label": "en panne"
+      },
+      {
+       "id": "orders",
+       "tone": "r",
+       "label": "attend les e-mails ?"
+      }
+     ],
+     "say": "Les e-mails sont en panne : faut-il bloquer la commande ? Commandes doit en décider **pour eux**."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "show": [
+      {
+       "id": "reco",
+       "tone": "y"
+      }
+     ],
+     "link": [
+      {
+       "from": "orders",
+       "to": "reco"
+      }
+     ],
+     "set": [
+      {
+       "id": "mail",
+       "tone": "b",
+       "label": null
+      },
+      {
+       "id": "orders",
+       "tone": "v",
+       "label": "à modifier"
+      }
+     ],
+     "hud": [
+      {
+       "label": "appels à écrire",
+       "value": 4,
+       "tone": "r"
+      }
+     ],
+     "say": "Une équipe veut ajouter des **recommandations** : il faut modifier et redéployer commandes."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "evenements",
+   "label": "Événements",
+   "title": "Publier un événement : ce qui s'est passé",
+   "body": [
+    "Commandes n'appelle plus personne. Il annonce ce qui s'est passé."
+   ],
+   "show": [
+    "orders",
+    "bus",
+    "stock",
+    "fact",
+    "mail"
+   ],
+   "links": [
+    {
+     "from": "orders",
+     "to": "bus"
+    },
+    {
+     "from": "bus",
+     "to": "stock"
+    },
+    {
+     "from": "bus",
+     "to": "fact"
+    },
+    {
+     "from": "bus",
+     "to": "mail"
+    }
+   ],
+   "hud": [
+    {
+     "label": "abonnés",
+     "value": 3
+    },
+    {
+     "label": "code modifié",
+     "value": "non"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "orders",
+      "bus"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "bus",
+       "label": "CommandePassée n° 4021"
+      }
+     ],
+     "say": "Commandes publie un **événement** : « commande passée », un fait, au passé. Il ne sait pas qui l'écoute."
+    },
+    {
+     "do": "send",
+     "path": [
+      "bus",
+      "stock"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "send",
+     "path": [
+      "bus",
+      "mail"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "stock",
+       "label": "réservé"
+      },
+      {
+       "id": "fact",
+       "label": "facturé"
+      },
+      {
+       "id": "mail",
+       "label": "envoyé"
+      }
+     ],
+     "say": "Chaque **abonné** lit l'événement et fait **son** travail : réserver, facturer, écrire."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "show": [
+      {
+       "id": "reco",
+       "tone": "y",
+       "label": "nouvel abonné"
+      }
+     ],
+     "link": [
+      {
+       "from": "bus",
+       "to": "reco"
+      }
+     ],
+     "hud": [
+      {
+       "label": "abonnés",
+       "value": 4,
+       "tone": "g"
+      },
+      {
+       "label": "code modifié",
+       "value": "non",
+       "tone": "g"
+      }
+     ],
+     "say": "Les recommandations s'**abonnent** au même événement. Commandes ne change **pas d'une ligne**."
+    },
+    {
+     "do": "send",
+     "path": [
+      "bus",
+      "reco"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "mail",
+       "tone": "r",
+       "label": "en panne, rattrapera"
+      },
+      {
+       "id": "reco",
+       "tone": "b"
+      }
+     ],
+     "say": "Si les e-mails tombent, la commande passe quand même ; ils **rattraperont** les événements en revenant."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "prix",
+   "label": "Le prix",
+   "title": "Le prix : un enchaînement que personne ne voit en entier",
+   "body": [
+    "Le stock manque. Que devient la commande, déjà facturée ?"
+   ],
+   "show": [
+    "orders",
+    "bus",
+    "stock",
+    "fact",
+    "mail",
+    "reco"
+   ],
+   "links": [
+    {
+     "from": "orders",
+     "to": "bus"
+    },
+    {
+     "from": "bus",
+     "to": "stock"
+    },
+    {
+     "from": "bus",
+     "to": "fact"
+    },
+    {
+     "from": "bus",
+     "to": "mail"
+    },
+    {
+     "from": "bus",
+     "to": "reco"
+    }
+   ],
+   "hud": [
+    {
+     "label": "état",
+     "value": "commande passée"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "stock",
+       "tone": "r",
+       "label": "rupture"
+      },
+      {
+       "id": "fact",
+       "label": "facturé"
+      }
+     ],
+     "say": "Le stock n'a plus le livre. La facture, elle, est **déjà** partie."
+    },
+    {
+     "do": "send",
+     "path": [
+      "stock",
+      "bus"
+     ],
+     "label": "RéservationÉchouée"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "bus",
+       "label": "RéservationÉchouée"
+      }
+     ],
+     "hud": [
+      {
+       "label": "état",
+       "value": "à corriger",
+       "tone": "y"
+      }
+     ],
+     "say": "Pas d'annulation globale : le stock publie à son tour un événement, « réservation échouée »."
+    },
+    {
+     "do": "send",
+     "path": [
+      "bus",
+      "fact"
+     ],
+     "label": "RéservationÉchouée"
+    },
+    {
+     "do": "send",
+     "path": [
+      "bus",
+      "mail"
+     ],
+     "label": "RéservationÉchouée"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "fact",
+       "label": "remboursé",
+       "tone": "g"
+      },
+      {
+       "id": "mail",
+       "label": "excuses envoyées"
+      }
+     ],
+     "hud": [
+      {
+       "label": "état",
+       "value": "annulée, remboursée",
+       "tone": "g"
+      }
+     ],
+     "say": "La facturation **rembourse**, les e-mails préviennent : chacun annule sa part. C'est une **saga**, faite d'actions de **compensation**."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "orders",
+       "label": "qui fait quoi ?",
+       "tone": "y"
+      }
+     ],
+     "say": "Le prix : l'enchaînement complet n'est écrit **nulle part**. Pour le suivre, il faut des **traces** et des identifiants de corrélation."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "cqrs",
+   "label": "CQRS",
+   "title": "CQRS : un modèle pour écrire, un autre pour lire",
+   "body": [
+    "La page « mes commandes » assemble six tables à chaque affichage."
+   ],
+   "show": [
+    "client",
+    "w-api",
+    "w-db"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "w-api"
+    },
+    {
+     "from": "w-api",
+     "to": "w-db"
+    }
+   ],
+   "hud": [
+    {
+     "label": "page commandes",
+     "value": "900 ms",
+     "tone": "r"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "w-db",
+       "label": "6 jointures par page",
+       "tone": "y"
+      }
+     ],
+     "say": "Une seule base sert à **écrire** juste et à **lire** vite : les deux besoins se gênent."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "w-db",
+       "label": null,
+       "tone": "b"
+      }
+     ],
+     "say": "**CQRS** sépare les deux : un **côté écriture** qui reçoit les ordres et applique les règles…"
+    },
+    {
+     "do": "send",
+     "path": [
+      "client",
+      "w-api",
+      "w-db"
+     ],
+     "label": "passer commande",
+     "reply": "ok"
+    },
+    {
+     "do": "scene",
+     "show": [
+      "c-bus"
+     ],
+     "link": [
+      {
+       "from": "w-db",
+       "to": "c-bus"
+      }
+     ],
+     "say": "…qui publie un événement à chaque changement…"
+    },
+    {
+     "do": "send",
+     "path": [
+      "w-db",
+      "c-bus"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "scene",
+     "show": [
+      "r-api",
+      "r-db"
+     ],
+     "link": [
+      {
+       "from": "c-bus",
+       "to": "r-db"
+      },
+      {
+       "from": "client",
+       "to": "r-api"
+      },
+      {
+       "from": "r-api",
+       "to": "r-db"
+      }
+     ],
+     "say": "…et un **côté lecture**, qui tient une vue **déjà assemblée** pour l'écran, mise à jour par ces événements."
+    },
+    {
+     "do": "send",
+     "path": [
+      "c-bus",
+      "r-db"
+     ],
+     "label": "CommandePassée"
+    },
+    {
+     "do": "send",
+     "path": [
+      "client",
+      "r-api",
+      "r-db"
+     ],
+     "label": "mes commandes ?",
+     "reply": "liste"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "r-db",
+       "label": "à jour en ~1 s"
+      }
+     ],
+     "hud": [
+      {
+       "label": "page commandes",
+       "value": "20 ms",
+       "tone": "g"
+      }
+     ],
+     "say": "La page se lit **d'un coup**. Le prix : la vue a un léger **retard** sur l'écriture."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}
