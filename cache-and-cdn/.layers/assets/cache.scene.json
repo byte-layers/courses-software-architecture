@@ -1,0 +1,694 @@
+{
+ "format": "bl-scenes/0.3",
+ "id": "cache-and-cdn",
+ "title": "Cache et CDN",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "requête"
+  },
+  {
+   "kind": "res",
+   "label": "réponse"
+  }
+ ],
+ "entities": [
+  {
+   "id": "users",
+   "kind": "actor",
+   "at": [
+    6.0,
+    6.0
+   ],
+   "label": "les lecteurs",
+   "detail": "Des milliers de lecteurs ouvrent la même recette."
+  },
+  {
+   "id": "app",
+   "kind": "node",
+   "at": [
+    1.5,
+    1.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "application du site",
+   "detail": "L'**application** construit chaque page à partir des données de la base."
+  },
+  {
+   "id": "db",
+   "kind": "store",
+   "at": [
+    -3.5,
+    -3.5
+   ],
+   "tone": "b",
+   "title": "base de données",
+   "detail": "La **base de données** garde les recettes. Lire sur disque et assembler une recette prend du temps."
+  },
+  {
+   "id": "cache",
+   "kind": "store",
+   "at": [
+    3.5,
+    -5.5
+   ],
+   "tone": "y",
+   "title": "cache",
+   "detail": "Un **cache** garde en mémoire une copie des réponses déjà calculées (Redis, Memcached…). Lire en mémoire est bien plus rapide."
+  },
+  {
+   "id": "paris",
+   "kind": "actor",
+   "at": [
+    1.5,
+    10.5
+   ],
+   "label": "lectrice à Paris"
+  },
+  {
+   "id": "mtl",
+   "kind": "actor",
+   "at": [
+    10.5,
+    1.5
+   ],
+   "label": "lecteur à Montréal"
+  },
+  {
+   "id": "edge-p",
+   "kind": "node",
+   "at": [
+    -3.0,
+    6.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "g",
+   "title": "CDN",
+   "sub": "serveur proche",
+   "detail": "Un **CDN** (*Content Delivery Network*) a des serveurs dans le monde entier. Chacun garde une copie des fichiers, près des lecteurs."
+  },
+  {
+   "id": "edge-m",
+   "kind": "node",
+   "at": [
+    6.0,
+    -3.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "g"
+  },
+  {
+   "id": "origin",
+   "kind": "node",
+   "at": [
+    -3.0,
+    -3.0
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "serveur d'origine",
+   "sub": "à Paris",
+   "detail": "Le **serveur d'origine** : celui du site, qui a la version de référence de chaque fichier."
+  }
+ ],
+ "steps": [
+  {
+   "id": "sans-cache",
+   "label": "Sans cache",
+   "title": "Sans cache : la même recette, calculée mille fois",
+   "body": [
+    "Chaque lecteur déclenche le même travail."
+   ],
+   "show": [
+    "users",
+    "app",
+    "db"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "db"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "users",
+      "app",
+      "db"
+     ],
+     "spread": true,
+     "gap": 320
+    }
+   ],
+   "hud": [
+    {
+     "label": "lectures base",
+     "value": "1 000/s"
+    },
+    {
+     "label": "réponse",
+     "value": "120 ms"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1800
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app",
+       "label": "tarte aux pommes ×1 000"
+      }
+     ],
+     "say": "Mille lecteurs par seconde ouvrent la **même** recette de tarte aux pommes."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "label": "occupée à 90 %",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "lectures base",
+       "value": "1 000/s",
+       "tone": "y"
+      }
+     ],
+     "say": "Pour chacun, l'application **relit** la base et refait la même page."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "réponse",
+       "value": "800 ms",
+       "tone": "r"
+      }
+     ],
+     "say": "Le résultat est **identique** à chaque fois : tout ce travail est refait pour rien."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "cache",
+   "label": "Le cache",
+   "title": "Le cache : garder une copie de la réponse",
+   "body": [
+    "Une copie en mémoire, demandée avant la base."
+   ],
+   "show": [
+    "users",
+    "app",
+    "db",
+    "cache"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "db"
+    },
+    {
+     "from": "app",
+     "to": "cache"
+    }
+   ],
+   "hud": [
+    {
+     "label": "lectures base",
+     "value": 0
+    },
+    {
+     "label": "réponse",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "cache"
+     ],
+     "label": "tarte ?",
+     "reply": "absente"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "cache",
+       "label": "vide"
+      }
+     ],
+     "say": "L'application demande d'abord au **cache**. Il ne l'a pas encore : c'est un **défaut de cache** (*miss*)."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "db"
+     ],
+     "label": "tarte ?",
+     "reply": "recette"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "cache",
+       "label": "tarte aux pommes"
+      }
+     ],
+     "hud": [
+      {
+       "label": "lectures base",
+       "value": 1
+      },
+      {
+       "label": "réponse",
+       "value": "120 ms"
+      }
+     ],
+     "say": "Elle lit la base une fois, puis **range** la réponse dans le cache."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "cache"
+     ],
+     "label": "tarte ?",
+     "reply": "recette"
+    },
+    {
+     "do": "scene",
+     "hud": [
+      {
+       "label": "réponse",
+       "value": "5 ms",
+       "tone": "g"
+      }
+     ],
+     "say": "Les lecteurs suivants sont servis **depuis la mémoire** : c'est un **succès de cache** (*hit*)."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "label": "au repos",
+       "tone": "g"
+      },
+      {
+       "id": "cache",
+       "label": "999 succès sur 1 000"
+      }
+     ],
+     "say": "Sur mille lectures, la base n'en voit plus qu'**une**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "perime",
+   "label": "Périmé",
+   "title": "La copie périmée : durée de vie et invalidation",
+   "body": [
+    "La recette change. Le cache, lui, ne le sait pas."
+   ],
+   "show": [
+    "users",
+    "app",
+    "db",
+    "cache"
+   ],
+   "links": [
+    {
+     "from": "users",
+     "to": "app"
+    },
+    {
+     "from": "app",
+     "to": "db"
+    },
+    {
+     "from": "app",
+     "to": "cache"
+    }
+   ],
+   "hud": [
+    {
+     "label": "base",
+     "value": "200 g sucre"
+    },
+    {
+     "label": "cache",
+     "value": "250 g sucre"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "db",
+       "label": "200 g de sucre",
+       "tone": "g"
+      }
+     ],
+     "say": "L'autrice corrige la recette dans la base : **200 g** de sucre au lieu de 250."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "cache"
+     ],
+     "label": "tarte ?",
+     "reply": "250 g"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "cache",
+       "label": "250 g, périmé",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "cache",
+       "value": "250 g sucre",
+       "tone": "r"
+      }
+     ],
+     "say": "Le cache sert toujours l'ancienne version : sa copie est **périmée**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "cache",
+       "label": "expire dans 10 min",
+       "tone": "y"
+      }
+     ],
+     "say": "Première parade : une **durée de vie** (*TTL*). Passé dix minutes, la copie est jetée et relue."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "app",
+       "label": "efface « tarte »"
+      },
+      {
+       "id": "cache",
+       "label": "vide",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "cache",
+       "value": "—"
+      }
+     ],
+     "say": "Seconde parade : **invalider** la copie au moment où la recette change."
+    },
+    {
+     "do": "send",
+     "path": [
+      "app",
+      "db"
+     ],
+     "label": "tarte ?",
+     "reply": "200 g"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "cache",
+       "label": "200 g",
+       "tone": "y"
+      },
+      {
+       "id": "app",
+       "label": null
+      }
+     ],
+     "hud": [
+      {
+       "label": "cache",
+       "value": "200 g sucre",
+       "tone": "g"
+      }
+     ],
+     "say": "La lecture suivante relit la base et range la **bonne** version."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "cdn",
+   "label": "CDN",
+   "title": "Le CDN : des copies près des lecteurs",
+   "body": [
+    "Le site est à Paris. Ses lecteurs, partout."
+   ],
+   "show": [
+    "paris",
+    "mtl",
+    "origin"
+   ],
+   "links": [
+    {
+     "from": "paris",
+     "to": "origin"
+    },
+    {
+     "from": "mtl",
+     "to": "origin"
+    }
+   ],
+   "hud": [
+    {
+     "label": "Montréal",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "mtl",
+      "origin"
+     ],
+     "label": "photo-tarte.jpg",
+     "reply": "photo"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "mtl",
+       "label": "lecteur à Montréal : 180 ms"
+      }
+     ],
+     "hud": [
+      {
+       "label": "Montréal",
+       "value": "180 ms",
+       "tone": "y"
+      }
+     ],
+     "say": "Depuis Montréal, chaque fichier traverse l'**Atlantique**, aller et retour."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "show": [
+      "edge-p",
+      "edge-m"
+     ],
+     "unlink": [
+      {
+       "from": "paris",
+       "to": "origin"
+      },
+      {
+       "from": "mtl",
+       "to": "origin"
+      }
+     ],
+     "link": [
+      {
+       "from": "paris",
+       "to": "edge-p"
+      },
+      {
+       "from": "mtl",
+       "to": "edge-m"
+      },
+      {
+       "from": "edge-p",
+       "to": "origin"
+      },
+      {
+       "from": "edge-m",
+       "to": "origin"
+      }
+     ],
+     "say": "Un **CDN** place des serveurs près des lecteurs, qui gardent des copies des fichiers."
+    },
+    {
+     "do": "send",
+     "path": [
+      "mtl",
+      "edge-m",
+      "origin"
+     ],
+     "label": "photo-tarte.jpg",
+     "reply": "photo"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "edge-m",
+       "label": "copie gardée"
+      }
+     ],
+     "say": "La première demande va jusqu'à l'**origine** ; le serveur de Montréal garde la copie."
+    },
+    {
+     "do": "send",
+     "path": [
+      "mtl",
+      "edge-m"
+     ],
+     "label": "photo-tarte.jpg",
+     "reply": "photo"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "mtl",
+       "label": "lecteur à Montréal : 15 ms"
+      },
+      {
+       "id": "origin",
+       "label": "au calme",
+       "tone": "g"
+      }
+     ],
+     "hud": [
+      {
+       "label": "Montréal",
+       "value": "15 ms",
+       "tone": "g"
+      }
+     ],
+     "say": "Les suivantes sont servies **sur place** : plus rapide, et l'origine ne voit presque plus rien passer."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  }
+ ]
+}
