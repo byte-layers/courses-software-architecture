@@ -1,0 +1,834 @@
+{
+ "format": "bl-scenes/0.4",
+ "id": "queues-and-event-logs",
+ "title": "Files et journaux",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "message"
+  },
+  {
+   "kind": "res",
+   "label": "acquittement"
+  }
+ ],
+ "entities": [
+  {
+   "id": "site",
+   "kind": "node",
+   "at": [
+    6.5,
+    6.5
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "site",
+   "sub": "producteur",
+   "detail": "Le **producteur** : le site publie un message à chaque inscription, puis passe à la suivante sans attendre qu'on le traite."
+  },
+  {
+   "id": "broker",
+   "kind": "store",
+   "at": [
+    2.8,
+    2.8
+   ],
+   "size": [
+    2.2,
+    2.2,
+    1.0
+   ],
+   "tone": "y",
+   "title": "broker",
+   "detail": "Le **broker** reçoit les messages et les garde jusqu'à ce qu'on les lise. RabbitMQ, Kafka, Amazon SQS en sont des exemples."
+  },
+  {
+   "id": "c1",
+   "kind": "node",
+   "at": [
+    -2.125,
+    0.125
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "consommateur",
+   "detail": "Un **consommateur** prend un message, le traite (envoyer l'e-mail de bienvenue), puis l'**acquitte** : il dit au broker que c'est fait."
+  },
+  {
+   "id": "c2",
+   "kind": "node",
+   "at": [
+    0.125,
+    -2.125
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "c3",
+   "kind": "node",
+   "at": [
+    -4.6,
+    -2.3
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b"
+  },
+  {
+   "id": "fact",
+   "kind": "node",
+   "at": [
+    6.8,
+    -1.2
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "g",
+   "title": "facturation",
+   "sub": "un autre groupe",
+   "detail": "Un second **groupe de consommateurs** : la facturation lit **tous** les événements, à son propre rythme."
+  }
+ ],
+ "steps": [
+  {
+   "id": "file",
+   "label": "La file",
+   "title": "La file de messages : chaque message à un seul consommateur",
+   "body": [
+    "Le site publie une inscription ; un consommateur la traite."
+   ],
+   "show": [
+    "site",
+    "broker",
+    "c1",
+    "c2"
+   ],
+   "links": [
+    {
+     "from": "site",
+     "to": "broker"
+    },
+    {
+     "from": "broker",
+     "to": "c1"
+    },
+    {
+     "from": "broker",
+     "to": "c2"
+    }
+   ],
+   "hud": [
+    {
+     "label": "en attente",
+     "value": 0
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "site",
+      "broker"
+     ],
+     "label": "inscription Léa"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "en attente : 1"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en attente",
+       "value": 1,
+       "tone": "y"
+      }
+     ],
+     "say": "Le site **dépose** le message dans le broker et passe à la suite, sans attendre."
+    },
+    {
+     "do": "wait",
+     "ms": 700
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": "e-mail envoyé"
+      }
+     ],
+     "say": "Le broker le donne à **un seul** consommateur, qui envoie l'e-mail de bienvenue."
+    },
+    {
+     "do": "send",
+     "path": [
+      "broker",
+      "c1"
+     ],
+     "label": "inscription Léa",
+     "reply": "acquitté"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": null
+      },
+      {
+       "id": "broker",
+       "label": "en attente : 0"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en attente",
+       "value": 0
+      }
+     ],
+     "say": "Le consommateur **acquitte** : le broker efface le message. Il ne sera traité qu'une fois."
+    },
+    {
+     "do": "send",
+     "path": [
+      "site",
+      "broker",
+      "c2"
+     ],
+     "label": "inscription Sam"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c2",
+       "label": "e-mail envoyé"
+      }
+     ],
+     "say": "Le message suivant va à l'autre consommateur : ils **se partagent** le travail."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "retard",
+   "label": "Le retard",
+   "title": "Quand on produit plus vite qu'on ne traite",
+   "body": [
+    "La rentrée : les inscriptions affluent."
+   ],
+   "show": [
+    "site",
+    "broker",
+    "c1",
+    "c2"
+   ],
+   "links": [
+    {
+     "from": "site",
+     "to": "broker"
+    },
+    {
+     "from": "broker",
+     "to": "c1"
+    },
+    {
+     "from": "broker",
+     "to": "c2"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "site",
+      "broker"
+     ],
+     "spread": true,
+     "gap": 260
+    }
+   ],
+   "hud": [
+    {
+     "label": "produits",
+     "value": "12 msg/s"
+    },
+    {
+     "label": "traités",
+     "value": "10 msg/s"
+    },
+    {
+     "label": "en attente",
+     "value": 0
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": "5 msg/s"
+      },
+      {
+       "id": "c2",
+       "label": "5 msg/s"
+      }
+     ],
+     "say": "12 inscriptions par seconde, et deux consommateurs qui en traitent **5 chacun**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "en attente : 120",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en attente",
+       "value": 120,
+       "tone": "y"
+      }
+     ],
+     "say": "2 messages de plus attendent **chaque seconde** : l'attente grossit, sans rien perdre."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "show": [
+      {
+       "id": "c3",
+       "label": "5 msg/s"
+      }
+     ],
+     "link": [
+      {
+       "from": "broker",
+       "to": "c3"
+      }
+     ],
+     "hud": [
+      {
+       "label": "traités",
+       "value": "15 msg/s",
+       "tone": "g"
+      }
+     ],
+     "say": "On ajoute un troisième consommateur : **15 messages par seconde** de capacité."
+    },
+    {
+     "do": "wait",
+     "ms": 1600
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "en attente : 0",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en attente",
+       "value": 0,
+       "tone": "g"
+      }
+     ],
+     "say": "L'attente se vide. Ajouter des consommateurs, c'est **monter en charge** sans toucher au site."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "acquittement",
+   "label": "Acquitter",
+   "title": "Un consommateur plante : perdu ou traité deux fois ?",
+   "body": [
+    "Le moment où l'on acquitte décide de ce qui arrive en cas de panne."
+   ],
+   "show": [
+    "site",
+    "broker",
+    "c1",
+    "c2"
+   ],
+   "links": [
+    {
+     "from": "site",
+     "to": "broker"
+    },
+    {
+     "from": "broker",
+     "to": "c1"
+    },
+    {
+     "from": "broker",
+     "to": "c2"
+    }
+   ],
+   "hud": [
+    {
+     "label": "perdus",
+     "value": 0
+    },
+    {
+     "label": "doublons",
+     "value": 0
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "broker",
+      "c1"
+     ],
+     "label": "inscription Noé"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": "e-mail envoyé, puis plante",
+       "tone": "r"
+      }
+     ],
+     "say": "c1 envoie l'e-mail de Noé… et **plante** avant d'acquitter."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "acquitter : après"
+      }
+     ],
+     "say": "**Acquitter après** le traitement : le broker n'a pas reçu l'accusé, il redonne le message."
+    },
+    {
+     "do": "send",
+     "path": [
+      "broker",
+      "c2"
+     ],
+     "label": "inscription Noé"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c2",
+       "label": "e-mail envoyé"
+      }
+     ],
+     "hud": [
+      {
+       "label": "doublons",
+       "value": 1,
+       "tone": "y"
+      }
+     ],
+     "say": "Noé reçoit **deux** e-mails. Rien n'est perdu, mais un message peut être traité deux fois : **au moins une fois**."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "acquitter : avant"
+      },
+      {
+       "id": "c2",
+       "label": null
+      }
+     ],
+     "hud": [
+      {
+       "label": "doublons",
+       "value": 0
+      },
+      {
+       "label": "perdus",
+       "value": 1,
+       "tone": "r"
+      }
+     ],
+     "say": "**Acquitter avant** le traitement : si c1 plante, le message est déjà effacé. Jamais de doublon, mais une perte : **au plus une fois**."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": "redémarré",
+       "tone": "b"
+      },
+      {
+       "id": "broker",
+       "label": "acquitter : après"
+      }
+     ],
+     "hud": [
+      {
+       "label": "perdus",
+       "value": 0,
+       "tone": "g"
+      }
+     ],
+     "say": "En pratique : acquitter après, et des consommateurs **idempotents**, qui reconnaissent un message déjà traité."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "journal",
+   "label": "Le journal",
+   "title": "Le journal d'événements : les messages restent",
+   "body": [
+    "La facturation veut lire, elle aussi, chaque inscription."
+   ],
+   "show": [
+    "site",
+    "broker",
+    "c1",
+    "c2"
+   ],
+   "links": [
+    {
+     "from": "site",
+     "to": "broker"
+    },
+    {
+     "from": "broker",
+     "to": "c1"
+    },
+    {
+     "from": "broker",
+     "to": "c2"
+    }
+   ],
+   "hud": [
+    {
+     "label": "e-mails",
+     "value": "position 900"
+    },
+    {
+     "label": "facturation",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "broker",
+       "label": "journal : 900 événements"
+      }
+     ],
+     "say": "Dans un **journal d'événements**, les messages ne sont pas effacés : ils restent, numérotés, dans l'ordre."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c1",
+       "label": "groupe e-mails"
+      },
+      {
+       "id": "c2",
+       "label": "groupe e-mails"
+      }
+     ],
+     "say": "Les consommateurs des e-mails forment un **groupe** : ils retiennent leur **position** dans le journal."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "show": [
+      "fact"
+     ],
+     "link": [
+      {
+       "from": "broker",
+       "to": "fact"
+      }
+     ],
+     "hud": [
+      {
+       "label": "facturation",
+       "value": "position 0",
+       "tone": "y"
+      }
+     ],
+     "say": "La facturation arrive, avec **son propre groupe** et sa propre position."
+    },
+    {
+     "do": "send",
+     "path": [
+      "broker",
+      "fact"
+     ],
+     "label": "événements 1 à 900"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "fact",
+       "label": "rattrape son retard"
+      }
+     ],
+     "hud": [
+      {
+       "label": "facturation",
+       "value": "position 640",
+       "tone": "y"
+      }
+     ],
+     "say": "Elle part du début et **relit tout** l'historique, sans rien changer pour les e-mails."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "send",
+     "path": [
+      "site",
+      "broker"
+     ],
+     "label": "inscription Lou"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "fact",
+       "label": "à jour"
+      }
+     ],
+     "hud": [
+      {
+       "label": "e-mails",
+       "value": "position 901"
+      },
+      {
+       "label": "facturation",
+       "value": "position 901",
+       "tone": "g"
+      }
+     ],
+     "say": "Chaque nouvel événement est lu par **les deux groupes**, chacun à son rythme."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "playground",
+   "label": "À toi",
+   "title": "À toi de jouer",
+   "body": [
+    "Change la production, ajoute des consommateurs, fais-en planter un, choisis quand acquitter, passe du mode file au mode journal : la scène suit.",
+    "En mode **guidé**, les consignes passent une à une sous la scène."
+   ],
+   "show": [
+    "site",
+    "broker",
+    "c1",
+    "c2"
+   ],
+   "links": [
+    {
+     "from": "site",
+     "to": "broker"
+    },
+    {
+     "from": "broker",
+     "to": "c1"
+    },
+    {
+     "from": "broker",
+     "to": "c2"
+    }
+   ],
+   "hud": [
+    {
+     "label": "produits",
+     "value": "12 msg/s"
+    },
+    {
+     "label": "en attente",
+     "value": 0
+    },
+    {
+     "label": "perdus",
+     "value": 0
+    },
+    {
+     "label": "doublons",
+     "value": 0
+    }
+   ],
+   "sim": {
+    "model": "queue",
+    "producer": "site",
+    "broker": "broker",
+    "consumers": [
+     {
+      "id": "c1"
+     },
+     {
+      "id": "c2"
+     },
+     {
+      "id": "c3"
+     }
+    ],
+    "groups": [
+     {
+      "id": "facturation",
+      "at": [
+       6.8,
+       -1.2
+      ],
+      "title": "facturation",
+      "speed": 3
+     }
+    ],
+    "production": {
+     "value": 12,
+     "min": 1,
+     "max": 40,
+     "step": 1
+    },
+    "capacity": {
+     "value": 5,
+     "min": 1,
+     "max": 20,
+     "step": 1
+    },
+    "crash": "c1",
+    "chart": true,
+    "guide": [
+     {
+      "say": "Regarde le broker : les messages s'accumulent.",
+      "until": {
+       "backlogMin": 10
+      },
+      "done": "12 messages arrivent chaque seconde, 10 repartent : 2 de plus attendent, chaque seconde."
+     },
+     {
+      "say": "Ajoute un consommateur.",
+      "until": {
+       "consumers": 3,
+       "backlogMax": 0
+      },
+      "done": "15 messages par seconde de capacité pour 12 produits : l'attente s'est vidée."
+     },
+     {
+      "say": "Fais planter c1, avec l'acquittement après le traitement.",
+      "until": {
+       "crashed": true,
+       "ack": "after",
+       "duplicatesMin": 1
+      },
+      "done": "c1 plante au milieu d'un message : le broker le redonne à un autre. Rien n'est perdu, mais il est traité deux fois."
+     },
+     {
+      "say": "Passe en journal, puis ajoute le groupe facturation.",
+      "until": {
+       "mode": "log",
+       "groups": 2
+      },
+      "done": "La facturation part du début du journal : elle relit tout, à son rythme. Les messages, eux, restent."
+     }
+    ]
+   }
+  }
+ ]
+}
