@@ -1,0 +1,922 @@
+{
+ "format": "bl-scenes/0.4",
+ "id": "sync-async-communication",
+ "title": "Synchrone ou asynchrone",
+ "lang": "fr",
+ "kit": "feuillete",
+ "legend": [
+  {
+   "kind": "req",
+   "label": "requête"
+  },
+  {
+   "kind": "res",
+   "label": "réponse"
+  }
+ ],
+ "entities": [
+  {
+   "id": "client",
+   "kind": "actor",
+   "at": [
+    -6.0,
+    6.0
+   ],
+   "label": "le client",
+   "detail": "Le client valide son panier et attend la réponse de la boutique."
+  },
+  {
+   "id": "a",
+   "kind": "node",
+   "at": [
+    -2.4,
+    2.4
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "v",
+   "title": "A · commandes",
+   "detail": "Le service A reçoit la commande. Pour répondre, il a besoin de B."
+  },
+  {
+   "id": "b",
+   "kind": "node",
+   "at": [
+    2.4,
+    -2.4
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "B · stock",
+   "detail": "Le service B réserve la paire en stock, puis demande le paiement à C."
+  },
+  {
+   "id": "c",
+   "kind": "node",
+   "at": [
+    6.6,
+    -6.6
+   ],
+   "size": [
+    1.8,
+    1.8,
+    1.0
+   ],
+   "tone": "b",
+   "title": "C · paiement",
+   "detail": "Le service C débite la carte. Le faire deux fois pour une même commande, c'est faire payer deux fois."
+  },
+  {
+   "id": "file",
+   "kind": "store",
+   "at": [
+    0,
+    0
+   ],
+   "size": [
+    1.2,
+    1.2,
+    0.5
+   ],
+   "tone": "y",
+   "title": "file de messages",
+   "detail": "Une **file de messages** garde les demandes déposées, jusqu'à ce qu'un service les prenne."
+  }
+ ],
+ "steps": [
+  {
+   "id": "synchrone",
+   "label": "Synchrone",
+   "title": "Synchrone : on attend la réponse",
+   "body": [
+    "Une commande traverse trois services, chacun attend le suivant."
+   ],
+   "show": [
+    "client",
+    "a",
+    "b",
+    "c"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "a"
+    },
+    {
+     "from": "a",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "réponse",
+     "value": "—"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "client",
+      "a",
+      "b",
+      "c"
+     ],
+     "label": "commande 81",
+     "reply": "payé",
+     "explain": [
+      "Le client envoie sa commande à A, et **attend**.",
+      "A appelle B, et attend à son tour.",
+      "B appelle C, et attend.",
+      "Les réponses remontent dans l'ordre inverse."
+     ]
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a",
+       "label": "50 ms"
+      },
+      {
+       "id": "b",
+       "label": "60 ms"
+      },
+      {
+       "id": "c",
+       "label": "60 ms"
+      }
+     ],
+     "hud": [
+      {
+       "label": "réponse",
+       "value": "170 ms"
+      }
+     ],
+     "say": "Chaque appel est **synchrone** : on attend la réponse avant de répondre soi-même."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "say": "Le temps de réponse est **la somme** des temps de chaque service. Simple, et le client sait tout de suite si c'est payé.",
+     "set": [
+      {
+       "id": "client",
+       "label": "client : payé, 170 ms"
+      }
+     ]
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "cascade",
+   "label": "Cascade",
+   "title": "Un service lent bloque toute la chaîne",
+   "body": [
+    "Le paiement ralentit. Regardez ce qui arrive aux deux autres."
+   ],
+   "show": [
+    "client",
+    "a",
+    "b",
+    "c"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "a"
+    },
+    {
+     "from": "a",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "flows": [
+    {
+     "path": [
+      "client",
+      "a",
+      "b"
+     ],
+     "spread": true,
+     "gap": 420,
+     "fallback": "erreur",
+     "reply": "ok"
+    }
+   ],
+   "hud": [
+    {
+     "label": "réponse",
+     "value": "170 ms"
+    },
+    {
+     "label": "échecs",
+     "value": "0 %"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 2200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a",
+       "label": "occupé 1/4"
+      },
+      {
+       "id": "b",
+       "label": "occupé 1/4"
+      },
+      {
+       "id": "c",
+       "label": "occupé 1/4"
+      }
+     ],
+     "say": "Chaque service n'a que **quelques places** pour traiter des requêtes en même temps : ici, quatre."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "lent · occupé 4/4",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "réponse",
+       "value": "1,4 s",
+       "tone": "y"
+      }
+     ],
+     "say": "C ralentit : chaque paiement lui prend **dix fois** plus de temps."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b",
+       "label": "occupé 4/4",
+       "tone": "y"
+      }
+     ],
+     "say": "Les places de B se remplissent de requêtes qui **attendent C**…"
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a",
+       "label": "occupé 4/4",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "réponse",
+       "value": "5 s",
+       "tone": "r"
+      },
+      {
+       "label": "échecs",
+       "value": "62 %",
+       "tone": "r"
+      }
+     ],
+     "say": "…puis celles de A. Les nouvelles commandes n'ont plus de place : elles **échouent**."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "client",
+       "label": "client : erreur"
+      }
+     ],
+     "say": "Un seul service lent, et toute la boutique tombe : c'est une **panne en cascade**."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "delai",
+   "label": "Délai, tentatives",
+   "title": "Délai d'attente et nouvelles tentatives",
+   "body": [
+    "Deux réglages pour ne plus attendre sans fin."
+   ],
+   "show": [
+    "client",
+    "a",
+    "b",
+    "c"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "a"
+    },
+    {
+     "from": "a",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "échecs",
+     "value": "62 %",
+     "tone": "r"
+    },
+    {
+     "label": "appels à C",
+     "value": "×1"
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "lent",
+       "tone": "y"
+      },
+      {
+       "id": "b",
+       "label": "abandonne à 300 ms",
+       "tone": "g"
+      }
+     ],
+     "say": "Un **délai d'attente** (*timeout*) : B abandonne C au bout de 300 ms, au lieu d'attendre sans fin."
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer ?",
+     "reply": "trop tard"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a",
+       "label": "places libres",
+       "tone": "g"
+      }
+     ],
+     "hud": [
+      {
+       "label": "échecs",
+       "value": "30 %",
+       "tone": "y"
+      }
+     ],
+     "say": "La réponse arrive vite, même en échec, et B **libère sa place** : A n'est plus bloqué."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b",
+       "label": "2 nouvelles tentatives",
+       "tone": "y"
+      }
+     ],
+     "say": "Une **nouvelle tentative** (*retry*) renvoie la demande après un échec. Utile contre une coupure brève…"
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer ? (2)"
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer ? (3)"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "submergé",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "appels à C",
+       "value": "×3",
+       "tone": "r"
+      },
+      {
+       "label": "échecs",
+       "value": "90 %",
+       "tone": "r"
+      }
+     ],
+     "say": "…mais contre un service **déjà lent**, chaque échec renvoie trois appels : la charge triple, tout sature."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "idempotence",
+   "label": "Idempotence",
+   "title": "Payé deux fois : l'idempotence",
+   "body": [
+    "Une nouvelle tentative peut répéter une action qui avait déjà réussi."
+   ],
+   "show": [
+    "b",
+    "c"
+   ],
+   "links": [
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "débits",
+     "value": 0
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer cmd 81"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "débité",
+       "tone": "g"
+      },
+      {
+       "id": "b",
+       "label": "pas de réponse",
+       "tone": "y"
+      }
+     ],
+     "hud": [
+      {
+       "label": "débits",
+       "value": 1
+      }
+     ],
+     "say": "C débite la carte… mais sa réponse **se perd** en route, ou arrive après le délai."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer cmd 81 (2)"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "débité deux fois",
+       "tone": "r"
+      }
+     ],
+     "hud": [
+      {
+       "label": "débits",
+       "value": 2,
+       "tone": "r"
+      }
+     ],
+     "say": "B réessaie. C ne sait pas que c'est la même commande : il débite **une seconde fois**."
+    },
+    {
+     "do": "wait",
+     "ms": 1500
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "clé cmd-81 déjà vue",
+       "tone": "g"
+      },
+      {
+       "id": "b",
+       "label": "clé cmd-81",
+       "tone": "b"
+      }
+     ],
+     "hud": [
+      {
+       "label": "débits",
+       "value": 1,
+       "tone": "g"
+      }
+     ],
+     "say": "Le remède : une **clé d'idempotence**, un identifiant unique joint à la demande."
+    },
+    {
+     "do": "send",
+     "path": [
+      "b",
+      "c"
+     ],
+     "label": "payer, clé cmd-81",
+     "reply": "déjà payé"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "b",
+       "label": "payé, une fois"
+      }
+     ],
+     "say": "C reconnaît la clé et renvoie le premier résultat : l'opération est **idempotente**, la répéter ne change rien."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "asynchrone",
+   "label": "Asynchrone",
+   "title": "Asynchrone : déposer et ne pas attendre",
+   "body": [
+    "A ne demande plus à B de répondre tout de suite : il dépose la demande."
+   ],
+   "show": [
+    "client",
+    "a",
+    "b",
+    "c",
+    "file"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "a"
+    },
+    {
+     "from": "a",
+     "to": "file"
+    },
+    {
+     "from": "file",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "réponse",
+     "value": "50 ms"
+    },
+    {
+     "label": "en file",
+     "value": 0
+    }
+   ],
+   "script": [
+    {
+     "do": "wait",
+     "ms": 900
+    },
+    {
+     "do": "send",
+     "path": [
+      "client",
+      "a"
+     ],
+     "label": "commande 82"
+    },
+    {
+     "do": "send",
+     "path": [
+      "a",
+      "file"
+     ],
+     "label": "à traiter : 82"
+    },
+    {
+     "do": "send",
+     "path": [
+      "a",
+      "client"
+     ],
+     "label": "commande reçue"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "client",
+       "label": "client : reçu, 50 ms"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en file",
+       "value": 1,
+       "tone": "y"
+      }
+     ],
+     "say": "A **dépose** la commande dans une file et répond tout de suite : « commande reçue »."
+    },
+    {
+     "do": "wait",
+     "ms": 1200
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "lent",
+       "tone": "y"
+      },
+      {
+       "id": "file",
+       "label": "en file : 12"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en file",
+       "value": 12,
+       "tone": "y"
+      }
+     ],
+     "say": "C ralentit ? Les commandes **s'accumulent** dans la file, mais personne n'attend."
+    },
+    {
+     "do": "wait",
+     "ms": 1400
+    },
+    {
+     "do": "send",
+     "path": [
+      "file",
+      "b",
+      "c"
+     ],
+     "label": "82",
+     "reply": "payé"
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "c",
+       "label": "rattrape",
+       "tone": "b"
+      },
+      {
+       "id": "file",
+       "label": "en file : 3"
+      }
+     ],
+     "hud": [
+      {
+       "label": "en file",
+       "value": 3
+      }
+     ],
+     "say": "B et C vident la file **à leur rythme**. Le client apprend le paiement plus tard, par une notification."
+    },
+    {
+     "do": "wait",
+     "ms": 1300
+    },
+    {
+     "do": "scene",
+     "set": [
+      {
+       "id": "a",
+       "label": "résultat : plus tard",
+       "tone": "y"
+      }
+     ],
+     "say": "Le prix : au moment de répondre, A **ne sait pas encore** si le paiement passera."
+    },
+    {
+     "do": "wait",
+     "ms": 3000
+    }
+   ]
+  },
+  {
+   "id": "playground",
+   "label": "À toi",
+   "title": "À toi de jouer",
+   "body": [
+    "Ralentis un service, coupe-le, règle le délai d'attente et les nouvelles tentatives, ajoute la clé d'idempotence, passe en asynchrone : la scène suit.",
+    "En mode **guidé**, les consignes passent une à une sous la scène."
+   ],
+   "show": [
+    "client",
+    "a",
+    "b",
+    "c"
+   ],
+   "links": [
+    {
+     "from": "client",
+     "to": "a"
+    },
+    {
+     "from": "a",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c"
+    }
+   ],
+   "hud": [
+    {
+     "label": "échecs",
+     "value": "0 %"
+    },
+    {
+     "label": "réponse",
+     "value": "170 ms"
+    },
+    {
+     "label": "en double",
+     "value": 0
+    }
+   ],
+   "sim": {
+    "model": "call-chain",
+    "client": "client",
+    "services": [
+     {
+      "id": "a"
+     },
+     {
+      "id": "b"
+     },
+     {
+      "id": "c"
+     }
+    ],
+    "traffic": {
+     "value": 6,
+     "min": 1,
+     "max": 40,
+     "step": 1
+    },
+    "timeout": {
+     "value": 300,
+     "min": 100,
+     "max": 3000,
+     "step": 100
+    },
+    "effect": "paiements",
+    "queue": {
+     "id": "queue",
+     "at": [
+      0,
+      0
+     ],
+     "title": "file de messages"
+    },
+    "chart": true,
+    "guide": [
+     {
+      "say": "Rends C lent : coche « lent » sur c.",
+      "until": {
+       "slow": "c",
+       "failedMin": 30
+      },
+      "done": "Les places de C se remplissent, puis celles de B et de A : la lenteur de C remonte jusqu'au client."
+     },
+     {
+      "say": "Active le délai d'attente des appels.",
+      "until": {
+       "timeout": true,
+       "failedMax": 95
+      },
+      "done": "A et B abandonnent au bout du délai : la réponse arrive vite, même en échec."
+     },
+     {
+      "say": "Ajoute 2 nouvelles tentatives.",
+      "until": {
+       "retries": 2,
+       "duplicatesMin": 1
+      },
+      "done": "Chaque échec repart vers C : la charge triple. Et des paiements passent deux fois."
+     },
+     {
+      "say": "Active la clé d'idempotence, puis passe en asynchrone.",
+      "until": {
+       "idempotency": true,
+       "mode": "async",
+       "failedMax": 5
+      },
+      "done": "A répond tout de suite, la file absorbe la lenteur de C, et aucun paiement ne passe deux fois."
+     }
+    ]
+   }
+  }
+ ]
+}
