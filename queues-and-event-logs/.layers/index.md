@@ -122,7 +122,7 @@ questions:
 - **Acquitter après** : au moins une fois, des **doublons** possibles ; **avant** : au plus une fois, des **pertes** possibles. Consommateurs **idempotents**.
 - **Journal d'événements** : les messages restent ; chaque **groupe** a sa **position** et peut **relire l'historique**.
 
-Ces outils dans des situations réelles, à côté des autres choix d'architecture : [Six organisations, six architectures](https://byte-layers.com/fr/bits/architecture-case-studies).
+Construire tout un système autour de ces événements : [Architecture orientée événements et CQRS](https://byte-layers.com/fr/bits/event-driven-cqrs).
 
 ```ack
 J'ai compris
